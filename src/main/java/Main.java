@@ -1,9 +1,15 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+
 
 public class Main {
     public static void main(String[] args) {
 
+
         Scanner scanner = new Scanner(System.in);
+
+        ArrayList<Integer> hps = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
         System.out.println("Pokedex Started");
 
         boolean running = true;
@@ -25,9 +31,24 @@ public class Main {
             switch (choice) {
                 case 1:
                     System.out.println("View all Pokemon");
+
+
+                    for (int i = 0; i < names.size(); i++) {
+                        System.out.println(
+                                (i + 1) + ". " + names.get(i) + " - HP: " + hps.get(i)
+                        );
+                    }
                     break;
                 case 2:
-                    System.out.println("Add");
+                    System.out.println("Add Pokemon");
+                    System.out.print("Pokemon name: ");
+                    String name = scanner.nextLine();
+
+                    int hp = readIntInRange(scanner, "HP: ", 1, 1000);
+
+                    names.add(name);
+                    hps.add(hp);
+                    System.out.println(name + " added!");
                     break;
                 case 3:
                     System.out.println("Edit");
