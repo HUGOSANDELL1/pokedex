@@ -5,16 +5,16 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
 
-
+        // Scanner is used to read input from the user
         Scanner scanner = new Scanner(System.in);
-
+        // These two lists store Pokemon names and HP values
         ArrayList<Integer> hps = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
         System.out.println("Pokedex Started");
 
         boolean running = true;
         while (running) {
-
+            // Main menu
             System.out.println();
             System.out.println("===Pokedex===");
             System.out.println("1. View all Pokemon");
@@ -25,10 +25,11 @@ public class Main {
             System.out.println("6. Load");
             System.out.println("7. Reset");
             System.out.println("8. Exit");
-
+            // Reads a valid menu choice between 1 and 8
             int choice = readIntInRange(scanner, "Choice: ", 1, 8);
 
             switch (choice) {
+                // Show all Pokemon currently stored in the lists
                 case 1:
                     System.out.println("View all Pokemon");
 
@@ -39,22 +40,46 @@ public class Main {
                         );
                     }
                     break;
-                case 2:
+                // Add a new Pokemon
+                    case 2:
                     System.out.println("Add Pokemon");
                     System.out.print("Pokemon name: ");
                     String name = scanner.nextLine();
 
                     int hp = readIntInRange(scanner, "HP: ", 1, 1000);
-
+                    // Store name and HP at the same position in both lists
                     names.add(name);
                     hps.add(hp);
                     System.out.println(name + " added!");
                     break;
                 case 3:
-                    System.out.println("Edit");
+                    System.out.println("Edit Pokemon");
                     break;
+                // Remove a Pokemon
                 case 4:
-                    System.out.println("Remove");
+                    System.out.println("Remove Pokemon");
+                    // Prevents trying to remove from an empty list
+                    if (names.isEmpty()) {
+                        System.out.println("No Pokemon to remove.");
+                        break;
+                    }
+                    // Show the Pokemon before the user chooses one
+                    for (int i = 0; i < names.size(); i++) {
+                        System.out.println((i + 1) + ". " + names.get(i) + " - HP: " + hps.get(i));
+                    }
+
+                    int removeChoice = readIntInRange(
+                            scanner,
+                            "Choose Pokemon to remove: ",
+                            1,
+                            names.size()
+                    );
+                    // User sees Pokemon starting at 1,
+                    // but ArrayList indexes start at 0
+                    String removedName = names.remove(removeChoice - 1);
+                    hps.remove(removeChoice - 1);
+
+                    System.out.println(removedName + " was removed from Pokedex!");
                     break;
                 case 5:
                     System.out.println("Save");
@@ -65,7 +90,8 @@ public class Main {
                 case 7:
                     System.out.println("Reset");
                     break;
-                case 8:
+                // Stop the while loop and exit the program
+                    case 8:
                     System.out.println("Exit");
                     running = false;
                     System.out.println("Goodbye!");
@@ -74,11 +100,12 @@ public class Main {
         }
         scanner.close();
     }
+    // Reads an integer and keeps asking until the value is inside the allowed range
     public static int readIntInRange(Scanner scanner, String message, int min, int max) {
 
         while (true) {
             System.out.print(message);
-
+            // Read input as text first so invalid input does not crash the program
             String input = scanner.nextLine().trim();
 
             try {
