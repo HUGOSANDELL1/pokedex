@@ -41,7 +41,7 @@ public class Main {
                     }
                     break;
                 // Add a new Pokemon
-                    case 2:
+                case 2:
                     System.out.println("Add Pokemon");
                     System.out.print("Pokemon name: ");
                     String name = scanner.nextLine();
@@ -54,6 +54,34 @@ public class Main {
                     break;
                 case 3:
                     System.out.println("Edit Pokemon");
+                    // Prevents trying to edit when there are no Pokemon in the list
+                    if (names.isEmpty()) {
+                        System.out.println("No Pokemon to edit.");
+                        break;
+                    }
+
+                    for (int i = 0; i < names.size(); i++) {
+                        System.out.println(
+                                (i + 1) + ". " + names.get(i) + " - HP: " + hps.get(i)
+                        );
+                    }
+
+                    int editChoice = readIntInRange(
+                            scanner,
+                            "Choose Pokemon to edit: ",
+                            1,
+                            names.size()
+                    );
+
+                    System.out.print("New Pokemon name: ");
+                    String newName = scanner.nextLine();
+
+                    int newHp = readIntInRange(scanner, "New HP: ", 1, 1000);
+                    // User chooses Pokemon starting at 1, but ArrayList index starts at 0
+                    names.set(editChoice - 1, newName);
+                    hps.set(editChoice - 1, newHp);
+
+                    System.out.println(newName + " updated!");
                     break;
                 // Remove a Pokemon
                 case 4:
@@ -91,7 +119,7 @@ public class Main {
                     System.out.println("Reset");
                     break;
                 // Stop the while loop and exit the program
-                    case 8:
+                case 8:
                     System.out.println("Exit");
                     running = false;
                     System.out.println("Goodbye!");
@@ -110,21 +138,16 @@ public class Main {
 
             try {
                 int value = Integer.parseInt(input);
-                if (value >= min && value <= max)  {
+                if (value >= min && value <= max) {
                     return value;
                 }
                 System.out.println("Enter a number between " + min + " and " + max + ".");
 
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Enter a whole number.");
             }
 
         }
-
-
-
-
 
 
     }
