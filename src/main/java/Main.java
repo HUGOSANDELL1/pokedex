@@ -49,8 +49,37 @@ public class Main {
                     String name = scanner.nextLine();
 
                     int hp = readIntInRange(scanner, "HP: ", 1, 1000);
+                    // Let the user choose the Pokemon type
+                    System.out.println("Choose Pokemon type:");
+                    System.out.println("1. FIRE");
+                    System.out.println("2. WATER");
+                    System.out.println("3. GRASS");
+                    System.out.println("4. ELECTRIC");
+                    System.out.println("5. NORMAL");
+
+                    int typeChoice = readIntInRange(scanner, "Type: ", 1, 5);
+
+                    Type type;
+
+                    switch (typeChoice) {
+                        case 1:
+                            type = Type.FIRE;
+                            break;
+                            case 2:
+                            type = Type.WATER;
+                            break;
+                            case 3:
+                            type = Type.GRASS;
+                            break;
+                            case 4:
+                            type = Type.ELECTRIC;
+                            break;
+                            default:
+                            type = Type.NORMAL;
+                            break;
+                    }
                     // Create a new Pokemon object and add it to the Pokedex
-                    Pokemon newPokemon = new Pokemon(name, Type.NORMAL, hp);
+                    Pokemon newPokemon = new Pokemon(name, type, hp);
                     pokemons.add(newPokemon);
                     System.out.println(name + " added!");
                     break;
