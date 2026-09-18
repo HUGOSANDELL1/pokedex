@@ -39,6 +39,15 @@ public class Main {
                                         " - Type: " + pokemon.type +
                                         " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
                         );
+
+                        for (Attack attack : pokemon.attacks) {
+                            System.out.println(
+                                    "   - " + attack.name +
+                                            " | Damage: " + attack.baseDamage +
+                                            " | Accuracy: " + attack.accuracy +
+                                            " | Type: " + attack.type
+                            );
+                        }
                     }
                     break;
                     // Add new Pokemon
