@@ -68,6 +68,66 @@ public class Main {
 
                     // Create a new Pokemon object and add it to the Pokedex
                     Pokemon newPokemon = new Pokemon(name, type, hp);
+
+                    int numberOfAttacks = readIntInRange(
+                            scanner,
+                            "How many attacks? (1-4): ",
+                            1,
+                            4
+                    );
+
+                    for (int i = 0; i < numberOfAttacks; i++) {
+                        System.out.print("Attack " + (i + 1) + " name: ");
+                        String attackName = scanner.nextLine();
+
+                        int baseDamage = readIntInRange(
+                                scanner,
+                                "Base damage: ",
+                                1,
+                                1000
+                        );
+
+                        int accuracy = readIntInRange(
+                                scanner,
+                                "Accuracy (1-100): ",
+                                1,
+                                100
+                        );
+
+                        System.out.println("Choose attack type:");
+                        System.out.println("1. FIRE");
+                        System.out.println("2. WATER");
+                        System.out.println("3. GRASS");
+                        System.out.println("4. ELECTRIC");
+                        System.out.println("5. NORMAL");
+
+                        int attackTypeChoice = readIntInRange(
+                                scanner,
+                                "Type: ",
+                                1,
+                                5
+                        );
+
+                        Type attackType = switch (attackTypeChoice) {
+                            case 1 -> Type.FIRE;
+                            case 2 -> Type.WATER;
+                            case 3 -> Type.GRASS;
+                            case 4 -> Type.ELECTRIC;
+                            default -> Type.NORMAL;
+                        };
+
+
+                        // Create the attack and add it to the Pokemon
+                        Attack attack = new Attack(
+                                attackName,
+                                baseDamage,
+                                accuracy,
+                                attackType
+                        );
+
+                        newPokemon.attacks.add(attack);
+                    }
+
                     pokemons.add(newPokemon);
                     System.out.println(name + " added!");
                     break;
