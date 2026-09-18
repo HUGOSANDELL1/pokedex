@@ -7,9 +7,8 @@ public class Main {
 
         // Scanner is used to read input from the user
         Scanner scanner = new Scanner(System.in);
-        // These two lists store Pokemon names and HP values
-        ArrayList<Integer> hps = new ArrayList<>();
-        ArrayList<String> names = new ArrayList<>();
+        // Stores all Pokemon objects in the Pokedex
+        ArrayList<Pokemon> pokemons = new ArrayList<>();
         System.out.println("Pokedex Started");
 
         boolean running = true;
@@ -29,40 +28,45 @@ public class Main {
             int choice = readIntInRange(scanner, "Choice: ", 1, 8);
 
             switch (choice) {
-                // Show all Pokemon currently stored in the lists
+                // Show all Pokemon currently stored in the Pokedex
                 case 1:
                     System.out.println("View all Pokemon");
 
+                    for (int i = 0; i < pokemons.size(); i++) {
+                        Pokemon pokemon = pokemons.get(i);
 
-                    for (int i = 0; i < names.size(); i++) {
                         System.out.println(
-                                (i + 1) + ". " + names.get(i) + " - HP: " + hps.get(i)
+                                (i + 1) + ". " + pokemon.name +
+                                        " - Type: " + pokemon.type +
+                                        " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
                         );
                     }
                     break;
-                // Add a new Pokemon
+                    // Add new Pokemon
                 case 2:
                     System.out.println("Add Pokemon");
                     System.out.print("Pokemon name: ");
                     String name = scanner.nextLine();
 
                     int hp = readIntInRange(scanner, "HP: ", 1, 1000);
-                    // Store name and HP at the same position in both lists
-                    names.add(name);
-                    hps.add(hp);
+                    // Create a new Pokemon object and add it to the Pokedex
+                    Pokemon newPokemon = new Pokemon(name, Type.NORMAL, hp);
+                    pokemons.add(newPokemon);
                     System.out.println(name + " added!");
                     break;
                 case 3:
                     System.out.println("Edit Pokemon");
                     // Prevents trying to edit when there are no Pokemon in the list
-                    if (names.isEmpty()) {
+                    if (pokemons.isEmpty()) {
                         System.out.println("No Pokemon to edit.");
                         break;
                     }
 
-                    for (int i = 0; i < names.size(); i++) {
+                    for (int i = 0; i < pokemons.size(); i++) {
+                        Pokemon pokemon = pokemons.get(i);
                         System.out.println(
-                                (i + 1) + ". " + names.get(i) + " - HP: " + hps.get(i)
+                                (i + 1) + ". " + pokemon.name +
+                                        " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
                         );
                     }
 
@@ -70,44 +74,49 @@ public class Main {
                             scanner,
                             "Choose Pokemon to edit: ",
                             1,
-                            names.size()
+                            pokemons.size()
                     );
+                    // Get the Pokemon the user selected
+                    Pokemon pokemonToEdit = pokemons.get(editChoice - 1);
 
                     System.out.print("New Pokemon name: ");
                     String newName = scanner.nextLine();
 
                     int newHp = readIntInRange(scanner, "New HP: ", 1, 1000);
-                    // User chooses Pokemon starting at 1, but ArrayList index starts at 0
-                    names.set(editChoice - 1, newName);
-                    hps.set(editChoice - 1, newHp);
 
+                    pokemonToEdit.name = newName;
+                    pokemonToEdit.maxHp = newHp;
+                    pokemonToEdit.currentHp = newHp;
                     System.out.println(newName + " updated!");
                     break;
                 // Remove a Pokemon
                 case 4:
                     System.out.println("Remove Pokemon");
-                    // Prevents trying to remove from an empty list
-                    if (names.isEmpty()) {
+                    // Prevents trying to remove when there are no Pokemon in the list
+                    if (pokemons.isEmpty()) {
                         System.out.println("No Pokemon to remove.");
                         break;
                     }
                     // Show the Pokemon before the user chooses one
-                    for (int i = 0; i < names.size(); i++) {
-                        System.out.println((i + 1) + ". " + names.get(i) + " - HP: " + hps.get(i));
+                    for (int i = 0; i < pokemons.size(); i++) {
+                        Pokemon pokemon = pokemons.get(i);
+
+                        System.out.println(
+                                (i + 1) + ". " + pokemon.name +
+                                        " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                        );
                     }
 
                     int removeChoice = readIntInRange(
                             scanner,
                             "Choose Pokemon to remove: ",
                             1,
-                            names.size()
+                            pokemons.size()
                     );
-                    // User sees Pokemon starting at 1,
-                    // but ArrayList indexes start at 0
-                    String removedName = names.remove(removeChoice - 1);
-                    hps.remove(removeChoice - 1);
 
-                    System.out.println(removedName + " was removed from Pokedex!");
+                    Pokemon removedPokemon = pokemons.remove(removeChoice - 1);
+
+                    System.out.println(removedPokemon.name + " was removed from Pokedex!");
                     break;
                 case 5:
                     System.out.println("Save");
@@ -128,11 +137,13 @@ public class Main {
         }
         scanner.close();
     }
+
     // Reads an integer and keeps asking until the value is inside the allowed range
     public static int readIntInRange(Scanner scanner, String message, int min, int max) {
 
         while (true) {
             System.out.print(message);
+
             // Read input as text first so invalid input does not crash the program
             String input = scanner.nextLine().trim();
 
@@ -146,11 +157,6 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Enter a whole number.");
             }
-
         }
-
-
     }
-
-
 }
