@@ -1,7 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
-
 public class Main {
     public static void main(String[] args) {
 
@@ -59,25 +58,14 @@ public class Main {
 
                     int typeChoice = readIntInRange(scanner, "Type: ", 1, 5);
 
-                    Type type;
+                    Type type = switch (typeChoice) {
+                        case 1 -> Type.FIRE;
+                        case 2 -> Type.WATER;
+                        case 3 -> Type.GRASS;
+                        case 4 -> Type.ELECTRIC;
+                        default -> Type.NORMAL;
+                    };
 
-                    switch (typeChoice) {
-                        case 1:
-                            type = Type.FIRE;
-                            break;
-                            case 2:
-                            type = Type.WATER;
-                            break;
-                            case 3:
-                            type = Type.GRASS;
-                            break;
-                            case 4:
-                            type = Type.ELECTRIC;
-                            break;
-                            default:
-                            type = Type.NORMAL;
-                            break;
-                    }
                     // Create a new Pokemon object and add it to the Pokedex
                     Pokemon newPokemon = new Pokemon(name, type, hp);
                     pokemons.add(newPokemon);
@@ -113,9 +101,28 @@ public class Main {
 
                     int newHp = readIntInRange(scanner, "New HP: ", 1, 1000);
 
+                    // Let the user choose the new Pokemon type
+                    System.out.println("Choose Pokemon type:");
+                    System.out.println("1. FIRE");
+                    System.out.println("2. WATER");
+                    System.out.println("3. GRASS");
+                    System.out.println("4. ELECTRIC");
+                    System.out.println("5. NORMAL");
+
+                    int newTypeChoice = readIntInRange(scanner, "Type: ", 1, 5);
+
+                    Type newType = switch (newTypeChoice) {
+                        case 1 -> Type.FIRE;
+                        case 2 -> Type.WATER;
+                        case 3 -> Type.GRASS;
+                        case 4 -> Type.ELECTRIC;
+                        default -> Type.NORMAL;
+                    };
+
                     pokemonToEdit.name = newName;
                     pokemonToEdit.maxHp = newHp;
                     pokemonToEdit.currentHp = newHp;
+                    pokemonToEdit.type = newType;
                     System.out.println(newName + " updated!");
                     break;
                 // Remove a Pokemon
