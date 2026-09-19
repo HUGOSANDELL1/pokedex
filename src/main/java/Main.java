@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -325,12 +327,32 @@ public class Main {
                     break;
                 case 5:
                     System.out.println("Save");
+                    savePokemon(pokemons);
                     break;
                 case 6:
                     System.out.println("Load");
                     break;
                 case 7:
                     System.out.println("Reset");
+                    System.out.println("Are you sure you want to reset the Pokedex?");
+                    System.out.println("1. Yes");
+                    System.out.println("2. No");
+
+                    int resetChoice = readIntInRange(
+                            scanner,
+                            "Choice: ",
+                            1,
+                            2
+                    );
+
+                    if (resetChoice == 1) {
+                        pokemons.clear();
+                        addSeedPokemon(pokemons);
+                        System.out.println("Pokedex reset to seed Pokemon.");
+                    } else {
+                        System.out.println("Reset cancelled.");
+                    }
+
                     break;
                 // Stop the while loop and exit the program
                 case 8:
@@ -565,5 +587,39 @@ public class Main {
         ivyCow.attacks.add(cinnamonbunRoll);
 
         pokemons.add(ivyCow);
+    }
+    public static void savePokemon(ArrayList<Pokemon> pokemons) {
+
+        try {
+            FileWriter writer = new FileWriter("pokemon.txt");
+
+            for (Pokemon pokemon : pokemons) {
+                writer.write(
+                        pokemon.name + ";" +
+                                pokemon.type + ";" +
+                                pokemon.maxHp + ";" +
+                                pokemon.currentHp +
+                                "\n"
+                );
+                for (Attack attack : pokemon.attacks) {
+                    writer.write(
+                            "ATTACK;" +
+                                    attack.name + ";" +
+                                    attack.baseDamage + ";" +
+                                    attack.accuracy + ";" +
+                                    attack.type +
+                                    "\n"
+                    );
+                }
+
+                writer.write("END\n");
+            }
+
+            writer.close();
+            System.out.println("Pokemon saved.");
+
+        } catch (IOException e) {
+            System.out.println("Could not save Pokemon.");
+        }
     }
 }
