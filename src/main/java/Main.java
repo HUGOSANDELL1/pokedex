@@ -165,6 +165,105 @@ public class Main {
                     // Get the Pokemon the user selected
                     Pokemon pokemonToEdit = pokemons.get(editChoice - 1);
 
+                    System.out.println("Current attacks:");
+
+                    for (int i = 0; i < pokemonToEdit.attacks.size(); i++) {
+                        Attack attack = pokemonToEdit.attacks.get(i);
+
+                        System.out.println(
+                                (i + 1) + ". " + attack.name +
+                                        " | Damage: " + attack.baseDamage +
+                                        " | Accuracy: " + attack.accuracy +
+                                        " | Type: " + attack.type
+                        );
+                    }
+
+                    System.out.println("1. Add attack");
+                    System.out.println("2. Remove attack");
+                    System.out.println("3. Keep attacks");
+
+                    int attackEditChoice = readIntInRange(
+                            scanner,
+                            "Choice: ",
+                            1,
+                            3
+                    );
+
+                    if (attackEditChoice == 1) {
+
+                        if (pokemonToEdit.attacks.size() >= 4) {
+                            System.out.println("This Pokemon already has 4 attacks.");
+                        } else {
+                            System.out.print("Attack name: ");
+                            String newAttackName = scanner.nextLine();
+
+                            int newBaseDamage = readIntInRange(
+                                    scanner,
+                                    "Base damage: ",
+                                    1,
+                                    1000
+                            );
+
+                            int newAccuracy = readIntInRange(
+                                    scanner,
+                                    "Accuracy (1-100): ",
+                                    1,
+                                    100
+                            );
+
+                            System.out.println("Choose attack type:");
+                            System.out.println("1. FIRE");
+                            System.out.println("2. WATER");
+                            System.out.println("3. GRASS");
+                            System.out.println("4. ELECTRIC");
+                            System.out.println("5. NORMAL");
+
+                            int newAttackTypeChoice = readIntInRange(
+                                    scanner,
+                                    "Type: ",
+                                    1,
+                                    5
+                            );
+
+                            Type newAttackType = switch (newAttackTypeChoice) {
+                                case 1 -> Type.FIRE;
+                                case 2 -> Type.WATER;
+                                case 3 -> Type.GRASS;
+                                case 4 -> Type.ELECTRIC;
+                                default -> Type.NORMAL;
+                            };
+
+                            Attack newAttack = new Attack(
+                                    newAttackName,
+                                    newBaseDamage,
+                                    newAccuracy,
+                                    newAttackType
+                            );
+
+                            pokemonToEdit.attacks.add(newAttack);
+
+                            System.out.println(newAttackName + " added!");
+                        }
+                    }
+                    if (attackEditChoice == 2) {
+
+                        if (pokemonToEdit.attacks.size() <= 1) {
+                            System.out.println("A Pokemon must have at least 1 attack.");
+                        } else {
+                            int removeAttackChoice = readIntInRange(
+                                    scanner,
+                                    "Choose attack to remove: ",
+                                    1,
+                                    pokemonToEdit.attacks.size()
+                            );
+
+                            Attack removedAttack =
+                                    pokemonToEdit.attacks.remove(removeAttackChoice - 1);
+
+                            System.out.println(removedAttack.name + " removed!");
+                        }
+                    }
+
                     System.out.print("New Pokemon name: ");
                     String newName = scanner.nextLine();
 
