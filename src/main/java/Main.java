@@ -39,12 +39,12 @@ public class Main {
             System.out.println("5. Save");
             System.out.println("6. Load");
             System.out.println("7. Reset");
-            System.out.println("8. search Pokemon");
+            System.out.println("8. Search Pokemon");
             System.out.println("9. Filter by type");
             System.out.println("10. Sort by name");
             System.out.println("11. Statistics");
             System.out.println("12. Exit");
-            // Reads a valid menu choice between 1 and 2
+            // Reads a valid menu choice between 1 and 12
             int choice = readIntInRange(scanner, "Choice: ", 1, 12);
 
             switch (choice) {
