@@ -2,6 +2,9 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,7 +13,18 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         // Stores all Pokemon objects in the Pokedex
         ArrayList<Pokemon> pokemons = new ArrayList<>();
-        addSeedPokemon(pokemons);
+        Path savePath = Path.of("pokemon.txt");
+
+        if (Files.exists(savePath)) {
+            loadPokemon(pokemons);
+
+            if (pokemons.isEmpty()) {
+                addSeedPokemon(pokemons);
+            }
+        } else {
+            addSeedPokemon(pokemons);
+        }
+
         System.out.println("Pokedex Started");
 
         boolean running = true;
@@ -25,9 +39,13 @@ public class Main {
             System.out.println("5. Save");
             System.out.println("6. Load");
             System.out.println("7. Reset");
-            System.out.println("8. Exit");
-            // Reads a valid menu choice between 1 and 8
-            int choice = readIntInRange(scanner, "Choice: ", 1, 8);
+            System.out.println("8. search Pokemon");
+            System.out.println("9. Filter by type");
+            System.out.println("10. Sort by name");
+            System.out.println("11. Statistics");
+            System.out.println("12. Exit");
+            // Reads a valid menu choice between 1 and 2
+            int choice = readIntInRange(scanner, "Choice: ", 1, 12);
 
             switch (choice) {
                 // Show all Pokemon currently stored in the Pokedex
@@ -56,8 +74,7 @@ public class Main {
                     // Add new Pokemon
                 case 2:
                     System.out.println("Add Pokemon");
-                    System.out.print("Pokemon name: ");
-                    String name = scanner.nextLine();
+                    String name = readValidName(scanner, "Pokemon name: ");
 
                     int hp = readIntInRange(scanner, "HP: ", 1, 1000);
                     // Let the user choose the Pokemon type
@@ -89,8 +106,10 @@ public class Main {
                     );
 
                     for (int i = 0; i < numberOfAttacks; i++) {
-                        System.out.print("Attack " + (i + 1) + " name: ");
-                        String attackName = scanner.nextLine();
+                        String attackName = readValidName(
+                                scanner,
+                                "Attack " + (i + 1) + " name: "
+                        );
 
                         int baseDamage = readIntInRange(
                                 scanner,
@@ -197,8 +216,10 @@ public class Main {
                         if (pokemonToEdit.attacks.size() >= 4) {
                             System.out.println("This Pokemon already has 4 attacks.");
                         } else {
-                            System.out.print("Attack name: ");
-                            String newAttackName = scanner.nextLine();
+                            String newAttackName = readValidName(
+                                    scanner,
+                                    "Attack name: "
+                            );
 
                             int newBaseDamage = readIntInRange(
                                     scanner,
@@ -267,8 +288,7 @@ public class Main {
                         }
                     }
 
-                    System.out.print("New Pokemon name: ");
-                    String newName = scanner.nextLine();
+                    String newName = readValidName(scanner, "New Pokemon name: ");
 
                     int newHp = readIntInRange(scanner, "New HP: ", 1, 1000);
 
@@ -331,6 +351,7 @@ public class Main {
                     break;
                 case 6:
                     System.out.println("Load");
+                    loadPokemon(pokemons);
                     break;
                 case 7:
                     System.out.println("Reset");
@@ -354,9 +375,135 @@ public class Main {
                     }
 
                     break;
-                // Stop the while loop and exit the program
+
                 case 8:
+                    System.out.println("Search Pokemon");
+
+                    String searchName = readValidName(
+                            scanner,
+                            "Enter Pokemon name: "
+                    );
+
+                    boolean found = false;
+
+                    for (Pokemon pokemon : pokemons) {
+                        if (pokemon.name.equalsIgnoreCase(searchName)) {
+                            System.out.println(
+                                    pokemon.name +
+                                            " - Type: " + pokemon.type +
+                                            " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                            );
+
+                            for (Attack attack : pokemon.attacks) {
+                                System.out.println(
+                                        "   - " + attack.name +
+                                                " | Damage: " + attack.baseDamage +
+                                                " | Accuracy: " + attack.accuracy +
+                                                " | Type: " + attack.type
+                                );
+                            }
+
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        System.out.println("Pokemon not found.");
+                    }
+
+                    break;
+
+                case 9:
+                    System.out.println("Filter Pokemon by type");
+
+                    System.out.println("1. FIRE");
+                    System.out.println("2. WATER");
+                    System.out.println("3. GRASS");
+                    System.out.println("4. ELECTRIC");
+                    System.out.println("5. NORMAL");
+
+                    int filterTypeChoice = readIntInRange(
+                            scanner,
+                            "Type: ",
+                            1,
+                            5
+                    );
+
+                    Type filterType = switch (filterTypeChoice) {
+                        case 1 -> Type.FIRE;
+                        case 2 -> Type.WATER;
+                        case 3 -> Type.GRASS;
+                        case 4 -> Type.ELECTRIC;
+                        default -> Type.NORMAL;
+                    };
+
+                    boolean foundType = false;
+
+                    for (Pokemon pokemon : pokemons) {
+                        if (pokemon.type == filterType) {
+                            System.out.println(
+                                    pokemon.name +
+                                            " - Type: " + pokemon.type +
+                                            " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                            );
+
+                            foundType = true;
+                        }
+                    }
+
+                    if (!foundType) {
+                        System.out.println("No Pokemon found with that type.");
+                    }
+
+                    break;
+
+                case 10:
+                    System.out.println("Sort Pokemon by name");
+
+                    pokemons.sort((p1, p2) ->
+                            p1.name.compareToIgnoreCase(p2.name)
+                    );
+
+                    System.out.println("Pokemon sorted by name.");
+                    break;
+
+                case 11:
+                    System.out.println("Pokemon Statistics");
+
+                    if (pokemons.isEmpty()) {
+                        System.out.println("No Pokemon available.");
+                        break;
+                    }
+
+                    int totalPokemon = pokemons.size();
+                    int totalHp = 0;
+
+                    Pokemon highestHpPokemon = pokemons.getFirst();
+
+                    for (Pokemon pokemon : pokemons) {
+                        totalHp += pokemon.maxHp;
+
+                        if (pokemon.maxHp > highestHpPokemon.maxHp) {
+                            highestHpPokemon = pokemon;
+                        }
+                    }
+
+                    double averageHp = (double) totalHp / totalPokemon;
+
+                    System.out.println("Total Pokemon: " + totalPokemon);
+                    System.out.println("Average HP: " + averageHp);
+                    System.out.println(
+                            "Highest HP: " +
+                                    highestHpPokemon.name +
+                                    " (" + highestHpPokemon.maxHp + ")"
+                    );
+
+                    break;
+                // Stop the while loop and exit the program
+                case 12:
                     System.out.println("Exit");
+                    savePokemon(pokemons);
                     running = false;
                     System.out.println("Goodbye!");
                     break;
@@ -386,6 +533,32 @@ public class Main {
             }
         }
     }
+
+    public static String readValidName(Scanner scanner, String message) {
+
+        while (true) {
+            System.out.print(message);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("Name cannot be empty.");
+                continue;
+            }
+
+            if (input.length() > 50) {
+                System.out.println("Name is too long. Maximum 50 characters.");
+                continue;
+            }
+
+            if (input.contains(";")) {
+                System.out.println("Name cannot contain ;");
+                continue;
+            }
+
+            return input;
+        }
+    }
+
     public static void addSeedPokemon(ArrayList<Pokemon> pokemons) {
 
         Pokemon frallis = new Pokemon(
@@ -620,6 +793,114 @@ public class Main {
 
         } catch (IOException e) {
             System.out.println("Could not save Pokemon.");
+        }
+    }
+
+    public static void loadPokemon(ArrayList<Pokemon> pokemons) {
+
+        Path path = Path.of("pokemon.txt");
+
+        if (!Files.exists(path)) {
+            System.out.println("No saved Pokemon file found.");
+            return;
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(path);
+
+            ArrayList<Pokemon> loadedPokemon = new ArrayList<>();
+            Pokemon currentPokemon = null;
+
+            for (String line : lines) {
+
+                if (line.isBlank()) {
+                    continue;
+                }
+
+                String[] parts = line.split(";", -1);
+
+                if (parts[0].equals("ATTACK")) {
+
+                    if (parts.length != 5 || currentPokemon == null) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    String attackName = parts[1];
+                    int baseDamage = Integer.parseInt(parts[2]);
+                    int accuracy = Integer.parseInt(parts[3]);
+                    Type attackType = Type.valueOf(parts[4]);
+
+                    if (attackName.isBlank()
+                            || baseDamage <= 0
+                            || accuracy < 1
+                            || accuracy > 100
+                            || currentPokemon.attacks.size() >= 4) {
+
+                        throw new IllegalArgumentException();
+                    }
+
+                    Attack attack = new Attack(
+                            attackName,
+                            baseDamage,
+                            accuracy,
+                            attackType
+                    );
+
+                    currentPokemon.attacks.add(attack);
+
+                } else if (parts[0].equals("END")) {
+
+                    if (parts.length != 1
+                            || currentPokemon == null
+                            || currentPokemon.attacks.isEmpty()
+                            || currentPokemon.attacks.size() > 4) {
+
+                        throw new IllegalArgumentException();
+                    }
+
+                    loadedPokemon.add(currentPokemon);
+                    currentPokemon = null;
+
+                } else {
+
+                    if (parts.length != 4 || currentPokemon != null) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    String name = parts[0];
+                    Type type = Type.valueOf(parts[1]);
+                    int maxHp = Integer.parseInt(parts[2]);
+                    int currentHp = Integer.parseInt(parts[3]);
+
+                    if (name.isBlank()
+                            || maxHp <= 0
+                            || currentHp < 0
+                            || currentHp > maxHp) {
+
+                        throw new IllegalArgumentException();
+                    }
+
+                    currentPokemon = new Pokemon(
+                            name,
+                            type,
+                            maxHp
+                    );
+
+                    currentPokemon.currentHp = currentHp;
+                }
+            }
+
+            if (currentPokemon != null) {
+                throw new IllegalArgumentException();
+            }
+
+            pokemons.clear();
+            pokemons.addAll(loadedPokemon);
+
+            System.out.println("Pokemon loaded.");
+
+        } catch (IOException | IllegalArgumentException e) {
+            System.out.println("Could not load Pokemon. The file may be corrupted.");
         }
     }
 }
