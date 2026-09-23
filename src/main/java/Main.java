@@ -1,10 +1,10 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.FileWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +13,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         // Stores all Pokemon objects in the Pokedex
         ArrayList<Pokemon> pokemons = new ArrayList<>();
-        Path savePath = Path.of("pokemon.txt");
+        Path savePath = Path.of("pokemon.json");
 
         if (Files.exists(savePath)) {
             loadPokemon(pokemons);
@@ -409,7 +409,11 @@ public class Main {
                     }
 
                     if (!found) {
-                        System.out.println("Pokemon not found.");
+                        try {
+                            throw new PokemonNotFoundException("Pokemon not found.");
+                        } catch (PokemonNotFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
 
                     break;
@@ -556,6 +560,27 @@ public class Main {
             }
 
             return input;
+        }
+    }
+
+    public static void validatePokemon(Pokemon pokemon) {
+
+        if (pokemon.name == null || pokemon.name.isBlank()) {
+            throw new InvalidPokemonException("Pokemon name is invalid.");
+        }
+
+        if (pokemon.maxHp <= 0) {
+            throw new InvalidPokemonException("Pokemon HP is invalid.");
+        }
+
+        if (pokemon.type == null) {
+            throw new InvalidPokemonException("Pokemon type is invalid.");
+        }
+
+        if (pokemon.attacks == null
+                || pokemon.attacks.isEmpty()
+                || pokemon.attacks.size() > 4) {
+            throw new InvalidPokemonException("Pokemon must have between 1 and 4 attacks.");
         }
     }
 
@@ -764,31 +789,14 @@ public class Main {
     public static void savePokemon(ArrayList<Pokemon> pokemons) {
 
         try {
-            FileWriter writer = new FileWriter("pokemon.txt");
+            ObjectMapper mapper = new ObjectMapper();
 
-            for (Pokemon pokemon : pokemons) {
-                writer.write(
-                        pokemon.name + ";" +
-                                pokemon.type + ";" +
-                                pokemon.maxHp + ";" +
-                                pokemon.currentHp +
-                                "\n"
-                );
-                for (Attack attack : pokemon.attacks) {
-                    writer.write(
-                            "ATTACK;" +
-                                    attack.name + ";" +
-                                    attack.baseDamage + ";" +
-                                    attack.accuracy + ";" +
-                                    attack.type +
-                                    "\n"
-                    );
-                }
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-                writer.write("END\n");
-            }
-
-            writer.close();
+            mapper.writeValue(
+                    Path.of("pokemon.json").toFile(),
+                    pokemons
+            );
             System.out.println("Pokemon saved.");
 
         } catch (IOException e) {
@@ -798,7 +806,7 @@ public class Main {
 
     public static void loadPokemon(ArrayList<Pokemon> pokemons) {
 
-        Path path = Path.of("pokemon.txt");
+        Path path = Path.of("pokemon.json");
 
         if (!Files.exists(path)) {
             System.out.println("No saved Pokemon file found.");
@@ -806,100 +814,23 @@ public class Main {
         }
 
         try {
-            List<String> lines = Files.readAllLines(path);
+            ObjectMapper mapper = new ObjectMapper();
 
-            ArrayList<Pokemon> loadedPokemon = new ArrayList<>();
-            Pokemon currentPokemon = null;
-
-            for (String line : lines) {
-
-                if (line.isBlank()) {
-                    continue;
-                }
-
-                String[] parts = line.split(";", -1);
-
-                if (parts[0].equals("ATTACK")) {
-
-                    if (parts.length != 5 || currentPokemon == null) {
-                        throw new IllegalArgumentException();
-                    }
-
-                    String attackName = parts[1];
-                    int baseDamage = Integer.parseInt(parts[2]);
-                    int accuracy = Integer.parseInt(parts[3]);
-                    Type attackType = Type.valueOf(parts[4]);
-
-                    if (attackName.isBlank()
-                            || baseDamage <= 0
-                            || accuracy < 1
-                            || accuracy > 100
-                            || currentPokemon.attacks.size() >= 4) {
-
-                        throw new IllegalArgumentException();
-                    }
-
-                    Attack attack = new Attack(
-                            attackName,
-                            baseDamage,
-                            accuracy,
-                            attackType
-                    );
-
-                    currentPokemon.attacks.add(attack);
-
-                } else if (parts[0].equals("END")) {
-
-                    if (parts.length != 1
-                            || currentPokemon == null
-                            || currentPokemon.attacks.isEmpty()
-                            || currentPokemon.attacks.size() > 4) {
-
-                        throw new IllegalArgumentException();
-                    }
-
-                    loadedPokemon.add(currentPokemon);
-                    currentPokemon = null;
-
-                } else {
-
-                    if (parts.length != 4 || currentPokemon != null) {
-                        throw new IllegalArgumentException();
-                    }
-
-                    String name = parts[0];
-                    Type type = Type.valueOf(parts[1]);
-                    int maxHp = Integer.parseInt(parts[2]);
-                    int currentHp = Integer.parseInt(parts[3]);
-
-                    if (name.isBlank()
-                            || maxHp <= 0
-                            || currentHp < 0
-                            || currentHp > maxHp) {
-
-                        throw new IllegalArgumentException();
-                    }
-
-                    currentPokemon = new Pokemon(
-                            name,
-                            type,
-                            maxHp
-                    );
-
-                    currentPokemon.currentHp = currentHp;
-                }
-            }
-
-            if (currentPokemon != null) {
-                throw new IllegalArgumentException();
-            }
+            Pokemon[] loadedPokemon = mapper.readValue(
+                    path.toFile(),
+                    Pokemon[].class
+            );
 
             pokemons.clear();
-            pokemons.addAll(loadedPokemon);
+
+            for (Pokemon pokemon : loadedPokemon) {
+                validatePokemon(pokemon);
+                pokemons.add(pokemon);
+            }
 
             System.out.println("Pokemon loaded.");
 
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (IOException | InvalidPokemonException e) {
             System.out.println("Could not load Pokemon. The file may be corrupted.");
         }
     }

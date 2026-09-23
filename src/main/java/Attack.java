@@ -4,6 +4,11 @@ public class Attack {
     public int baseDamage;
     public int accuracy;
     public Type type;
+
+    // Empty constructor used when loading JSON
+    public Attack() {
+    }
+
     // Creates a new attack with the values above
     public Attack(String name, int baseDamage, int accuracy, Type type) {
         this.name = name;
