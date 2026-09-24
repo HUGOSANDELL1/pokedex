@@ -1,8 +1,5 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -11,12 +8,13 @@ public class Main {
 
         // Scanner is used to read input from the user
         Scanner scanner = new Scanner(System.in);
+
         // Stores all Pokemon objects in the Pokedex
         ArrayList<Pokemon> pokemons = new ArrayList<>();
         Path savePath = Path.of("pokemon.json");
 
         if (Files.exists(savePath)) {
-            loadPokemon(pokemons);
+            PokemonFileManager.loadPokemon(pokemons);
 
             if (pokemons.isEmpty()) {
                 addSeedPokemon(pokemons);
@@ -29,6 +27,7 @@ public class Main {
 
         boolean running = true;
         while (running) {
+
             // Main menu
             System.out.println();
             System.out.println("===Pokedex===");
@@ -44,10 +43,12 @@ public class Main {
             System.out.println("10. Sort by name");
             System.out.println("11. Statistics");
             System.out.println("12. Exit");
+
             // Reads a valid menu choice between 1 and 12
             int choice = readIntInRange(scanner, "Choice: ", 1, 12);
 
             switch (choice) {
+
                 // Show all Pokemon currently stored in the Pokedex
                 case 1:
                     System.out.println("View all Pokemon");
@@ -71,12 +72,14 @@ public class Main {
                         }
                     }
                     break;
+
                     // Add new Pokemon
                 case 2:
                     System.out.println("Add Pokemon");
                     String name = readValidName(scanner, "Pokemon name: ");
 
                     int hp = readIntInRange(scanner, "HP: ", 1, 1000);
+
                     // Let the user choose the Pokemon type
                     System.out.println("Choose Pokemon type:");
                     System.out.println("1. FIRE");
@@ -147,7 +150,6 @@ public class Main {
                             default -> Type.NORMAL;
                         };
 
-
                         // Create the attack and add it to the Pokemon
                         Attack attack = new Attack(
                                 attackName,
@@ -164,6 +166,7 @@ public class Main {
                     break;
                 case 3:
                     System.out.println("Edit Pokemon");
+
                     // Prevents trying to edit when there are no Pokemon in the list
                     if (pokemons.isEmpty()) {
                         System.out.println("No Pokemon to edit.");
@@ -184,6 +187,7 @@ public class Main {
                             1,
                             pokemons.size()
                     );
+
                     // Get the Pokemon the user selected
                     Pokemon pokemonToEdit = pokemons.get(editChoice - 1);
 
@@ -316,14 +320,17 @@ public class Main {
                     pokemonToEdit.type = newType;
                     System.out.println(newName + " updated!");
                     break;
-                // Remove a Pokemon
+
+                    // Remove a Pokemon
                 case 4:
                     System.out.println("Remove Pokemon");
+
                     // Prevents trying to remove when there are no Pokemon in the list
                     if (pokemons.isEmpty()) {
                         System.out.println("No Pokemon to remove.");
                         break;
                     }
+
                     // Show the Pokemon before the user chooses one
                     for (int i = 0; i < pokemons.size(); i++) {
                         Pokemon pokemon = pokemons.get(i);
@@ -347,11 +354,11 @@ public class Main {
                     break;
                 case 5:
                     System.out.println("Save");
-                    savePokemon(pokemons);
+                    PokemonFileManager.savePokemon(pokemons);
                     break;
                 case 6:
                     System.out.println("Load");
-                    loadPokemon(pokemons);
+                    PokemonFileManager.loadPokemon(pokemons);
                     break;
                 case 7:
                     System.out.println("Reset");
@@ -384,10 +391,9 @@ public class Main {
                             "Enter Pokemon name: "
                     );
 
-                    boolean found = false;
 
-                    for (Pokemon pokemon : pokemons) {
-                        if (pokemon.name.equalsIgnoreCase(searchName)) {
+                    try {
+                        Pokemon pokemon = findPokemonByName(pokemons, searchName);
                             System.out.println(
                                     pokemon.name +
                                             " - Type: " + pokemon.type +
@@ -402,19 +408,9 @@ public class Main {
                                                 " | Type: " + attack.type
                                 );
                             }
-
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) {
-                        try {
-                            throw new PokemonNotFoundException("Pokemon not found.");
                         } catch (PokemonNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
-                    }
 
                     break;
 
@@ -504,10 +500,11 @@ public class Main {
                     );
 
                     break;
-                // Stop the while loop and exit the program
+
+                    // Stop the while loop and exit the program
                 case 12:
                     System.out.println("Exit");
-                    savePokemon(pokemons);
+                    PokemonFileManager.savePokemon(pokemons);
                     running = false;
                     System.out.println("Goodbye!");
                     break;
@@ -563,6 +560,18 @@ public class Main {
         }
     }
 
+    public static Pokemon findPokemonByName(ArrayList<Pokemon> pokemons, String name) {
+
+        for (Pokemon pokemon : pokemons) {
+            if (pokemon.name.equalsIgnoreCase(name)) {
+                return pokemon;
+            }
+        }
+
+        throw new PokemonNotFoundException("Pokemon not found.");
+    }
+
+    // Validates Pokemon data loaded from the JSON file
     public static void validatePokemon(Pokemon pokemon) {
 
         if (pokemon.name == null || pokemon.name.isBlank()) {
@@ -785,53 +794,5 @@ public class Main {
         ivyCow.attacks.add(cinnamonbunRoll);
 
         pokemons.add(ivyCow);
-    }
-    public static void savePokemon(ArrayList<Pokemon> pokemons) {
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-            mapper.writeValue(
-                    Path.of("pokemon.json").toFile(),
-                    pokemons
-            );
-            System.out.println("Pokemon saved.");
-
-        } catch (IOException e) {
-            System.out.println("Could not save Pokemon.");
-        }
-    }
-
-    public static void loadPokemon(ArrayList<Pokemon> pokemons) {
-
-        Path path = Path.of("pokemon.json");
-
-        if (!Files.exists(path)) {
-            System.out.println("No saved Pokemon file found.");
-            return;
-        }
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-
-            Pokemon[] loadedPokemon = mapper.readValue(
-                    path.toFile(),
-                    Pokemon[].class
-            );
-
-            pokemons.clear();
-
-            for (Pokemon pokemon : loadedPokemon) {
-                validatePokemon(pokemon);
-                pokemons.add(pokemon);
-            }
-
-            System.out.println("Pokemon loaded.");
-
-        } catch (IOException | InvalidPokemonException e) {
-            System.out.println("Could not load Pokemon. The file may be corrupted.");
-        }
     }
 }

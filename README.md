@@ -2,7 +2,7 @@
 
 This is a console application made in Java where the user can manage Pokemon and their attacks.
 
-The program can add, edit, remove, search and display Pokemon. It can also save and load data from a text file.
+The program can add, edit, remove, search and display Pokemon. It can also save and load data from a JSON file.
 
 ## How to run
 
@@ -31,6 +31,6 @@ When the program starts, the user gets a menu:
 
 For example, the user can choose Search Pokemon and enter Pikachu to display that Pokemon.
 
-Pokemon are saved in pokemon.txt and loaded automatically when the program starts.
+Pokemon are saved in pokemon.json and loaded automatically when the program starts.
 
 If no save file exists, the program starts with predefined Pokemon.
