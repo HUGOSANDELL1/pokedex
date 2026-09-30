@@ -17,10 +17,10 @@ public class Main {
             PokemonFileManager.loadPokemon(pokemons);
 
             if (pokemons.isEmpty()) {
-                addSeedPokemon(pokemons);
+                PokemonSeeder.addSeedPokemon(pokemons);
             }
         } else {
-            addSeedPokemon(pokemons);
+            PokemonSeeder.addSeedPokemon(pokemons);
         }
 
         System.out.println("Pokedex Started");
@@ -57,17 +57,17 @@ public class Main {
                         Pokemon pokemon = pokemons.get(i);
 
                         System.out.println(
-                                (i + 1) + ". " + pokemon.name +
-                                        " - Type: " + pokemon.type +
-                                        " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                                (i + 1) + ". " + pokemon.getName() +
+                                        " - Type: " + pokemon.getType() +
+                                        " - HP: " + pokemon.getCurrentHp() + "/" + pokemon.getMaxHp()
                         );
 
-                        for (Attack attack : pokemon.attacks) {
+                        for (Attack attack : pokemon.getAttacks()) {
                             System.out.println(
-                                    "   - " + attack.name +
-                                            " | Damage: " + attack.baseDamage +
-                                            " | Accuracy: " + attack.accuracy +
-                                            " | Type: " + attack.type
+                                    "   - " + attack.getName() +
+                                            " | Damage: " + attack.getBaseDamage() +
+                                            " | Accuracy: " + attack.getAccuracy() +
+                                            " | Type: " + attack.getType()
                             );
                         }
                     }
@@ -158,7 +158,7 @@ public class Main {
                                 attackType
                         );
 
-                        newPokemon.attacks.add(attack);
+                        newPokemon.getAttacks().add(attack);
                     }
 
                     pokemons.add(newPokemon);
@@ -176,8 +176,8 @@ public class Main {
                     for (int i = 0; i < pokemons.size(); i++) {
                         Pokemon pokemon = pokemons.get(i);
                         System.out.println(
-                                (i + 1) + ". " + pokemon.name +
-                                        " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                                (i + 1) + ". " + pokemon.getName() +
+                                        " - HP: " + pokemon.getCurrentHp() + "/" + pokemon.getMaxHp()
                         );
                     }
 
@@ -193,14 +193,14 @@ public class Main {
 
                     System.out.println("Current attacks:");
 
-                    for (int i = 0; i < pokemonToEdit.attacks.size(); i++) {
-                        Attack attack = pokemonToEdit.attacks.get(i);
+                    for (int i = 0; i < pokemonToEdit.getAttacks().size(); i++) {
+                        Attack attack = pokemonToEdit.getAttacks().get(i);
 
                         System.out.println(
-                                (i + 1) + ". " + attack.name +
-                                        " | Damage: " + attack.baseDamage +
-                                        " | Accuracy: " + attack.accuracy +
-                                        " | Type: " + attack.type
+                                (i + 1) + ". " + attack.getName() +
+                                        " | Damage: " + attack.getBaseDamage() +
+                                        " | Accuracy: " + attack.getAccuracy() +
+                                        " | Type: " + attack.getType()
                         );
                     }
 
@@ -217,7 +217,7 @@ public class Main {
 
                     if (attackEditChoice == 1) {
 
-                        if (pokemonToEdit.attacks.size() >= 4) {
+                        if (pokemonToEdit.getAttacks().size() >= 4) {
                             System.out.println("This Pokemon already has 4 attacks.");
                         } else {
                             String newAttackName = InputHelper.readValidName(
@@ -268,27 +268,27 @@ public class Main {
                                     newAttackType
                             );
 
-                            pokemonToEdit.attacks.add(newAttack);
+                            pokemonToEdit.getAttacks().add(newAttack);
 
                             System.out.println(newAttackName + " added!");
                         }
                     }
                     if (attackEditChoice == 2) {
 
-                        if (pokemonToEdit.attacks.size() <= 1) {
+                        if (pokemonToEdit.getAttacks().size() <= 1) {
                             System.out.println("A Pokemon must have at least 1 attack.");
                         } else {
                             int removeAttackChoice = InputHelper.readIntInRange(
                                     scanner,
                                     "Choose attack to remove: ",
                                     1,
-                                    pokemonToEdit.attacks.size()
+                                    pokemonToEdit.getAttacks().size()
                             );
 
                             Attack removedAttack =
-                                    pokemonToEdit.attacks.remove(removeAttackChoice - 1);
+                                    pokemonToEdit.getAttacks().remove(removeAttackChoice - 1);
 
-                            System.out.println(removedAttack.name + " removed!");
+                            System.out.println(removedAttack.getName() + " removed!");
                         }
                     }
 
@@ -314,10 +314,10 @@ public class Main {
                         default -> Type.NORMAL;
                     };
 
-                    pokemonToEdit.name = newName;
-                    pokemonToEdit.maxHp = newHp;
-                    pokemonToEdit.currentHp = newHp;
-                    pokemonToEdit.type = newType;
+                    pokemonToEdit.setName(newName);
+                    pokemonToEdit.setMaxHp(newHp);
+                    pokemonToEdit.setCurrentHp(newHp);
+                    pokemonToEdit.setType(newType);
                     System.out.println(newName + " updated!");
                     break;
 
@@ -336,8 +336,8 @@ public class Main {
                         Pokemon pokemon = pokemons.get(i);
 
                         System.out.println(
-                                (i + 1) + ". " + pokemon.name +
-                                        " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                                (i + 1) + ". " + pokemon.getName() +
+                                        " - HP: " + pokemon.getCurrentHp() + "/" + pokemon.getMaxHp()
                         );
                     }
 
@@ -350,7 +350,7 @@ public class Main {
 
                     Pokemon removedPokemon = pokemons.remove(removeChoice - 1);
 
-                    System.out.println(removedPokemon.name + " was removed from Pokedex!");
+                    System.out.println(removedPokemon.getName() + " was removed from Pokedex!");
                     break;
                 case 5:
                     System.out.println("Save");
@@ -375,7 +375,7 @@ public class Main {
 
                     if (resetChoice == 1) {
                         pokemons.clear();
-                        addSeedPokemon(pokemons);
+                        PokemonSeeder.addSeedPokemon(pokemons);
                         System.out.println("Pokedex reset to seed Pokemon.");
                     } else {
                         System.out.println("Reset cancelled.");
@@ -395,17 +395,17 @@ public class Main {
                     try {
                         Pokemon pokemon = findPokemonByName(pokemons, searchName);
                             System.out.println(
-                                    pokemon.name +
-                                            " - Type: " + pokemon.type +
-                                            " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                                    pokemon.getName() +
+                                            " - Type: " + pokemon.getType() +
+                                            " - HP: " + pokemon.getCurrentHp() + "/" + pokemon.getMaxHp()
                             );
 
-                            for (Attack attack : pokemon.attacks) {
+                            for (Attack attack : pokemon.getAttacks()) {
                                 System.out.println(
-                                        "   - " + attack.name +
-                                                " | Damage: " + attack.baseDamage +
-                                                " | Accuracy: " + attack.accuracy +
-                                                " | Type: " + attack.type
+                                        "   - " + attack.getName() +
+                                                " | Damage: " + attack.getBaseDamage() +
+                                                " | Accuracy: " + attack.getAccuracy() +
+                                                " | Type: " + attack.getType()
                                 );
                             }
                         } catch (PokemonNotFoundException e) {
@@ -441,11 +441,11 @@ public class Main {
                     boolean foundType = false;
 
                     for (Pokemon pokemon : pokemons) {
-                        if (pokemon.type == filterType) {
+                        if (pokemon.getType() == filterType) {
                             System.out.println(
-                                    pokemon.name +
-                                            " - Type: " + pokemon.type +
-                                            " - HP: " + pokemon.currentHp + "/" + pokemon.maxHp
+                                    pokemon.getName() +
+                                            " - Type: " + pokemon.getType() +
+                                            " - HP: " + pokemon.getCurrentHp() + "/" + pokemon.getMaxHp()
                             );
 
                             foundType = true;
@@ -462,7 +462,7 @@ public class Main {
                     System.out.println("Sort Pokemon by name");
 
                     pokemons.sort((p1, p2) ->
-                            p1.name.compareToIgnoreCase(p2.name)
+                            p1.getName().compareToIgnoreCase(p2.getName())
                     );
 
                     System.out.println("Pokemon sorted by name.");
@@ -482,9 +482,9 @@ public class Main {
                     Pokemon highestHpPokemon = pokemons.getFirst();
 
                     for (Pokemon pokemon : pokemons) {
-                        totalHp += pokemon.maxHp;
+                        totalHp += pokemon.getMaxHp();
 
-                        if (pokemon.maxHp > highestHpPokemon.maxHp) {
+                        if (pokemon.getMaxHp() > highestHpPokemon.getMaxHp()) {
                             highestHpPokemon = pokemon;
                         }
                     }
@@ -495,8 +495,8 @@ public class Main {
                     System.out.println("Average HP: " + averageHp);
                     System.out.println(
                             "Highest HP: " +
-                                    highestHpPokemon.name +
-                                    " (" + highestHpPokemon.maxHp + ")"
+                                    highestHpPokemon.getName() +
+                                    " (" + highestHpPokemon.getMaxHp() + ")"
                     );
 
                     break;
@@ -516,7 +516,7 @@ public class Main {
     public static Pokemon findPokemonByName(ArrayList<Pokemon> pokemons, String name) {
 
         for (Pokemon pokemon : pokemons) {
-            if (pokemon.name.equalsIgnoreCase(name)) {
+            if (pokemon.getName().equalsIgnoreCase(name)) {
                 return pokemon;
             }
         }
@@ -527,225 +527,22 @@ public class Main {
     // Validates Pokemon data loaded from the JSON file
     public static void validatePokemon(Pokemon pokemon) {
 
-        if (pokemon.name == null || pokemon.name.isBlank()) {
+        if (pokemon.getName() == null || pokemon.getName().isBlank()) {
             throw new InvalidPokemonException("Pokemon name is invalid.");
         }
 
-        if (pokemon.maxHp <= 0) {
+        if (pokemon.getMaxHp() <= 0) {
             throw new InvalidPokemonException("Pokemon HP is invalid.");
         }
 
-        if (pokemon.type == null) {
+        if (pokemon.getType() == null) {
             throw new InvalidPokemonException("Pokemon type is invalid.");
         }
 
-        if (pokemon.attacks == null
-                || pokemon.attacks.isEmpty()
-                || pokemon.attacks.size() > 4) {
+        if (pokemon.getAttacks() == null
+                || pokemon.getAttacks().isEmpty()
+                || pokemon.getAttacks().size() > 4) {
             throw new InvalidPokemonException("Pokemon must have between 1 and 4 attacks.");
         }
-    }
-
-    public static void addSeedPokemon(ArrayList<Pokemon> pokemons) {
-
-        Pokemon frallis = new Pokemon(
-                "Frallis",
-                Type.FIRE,
-                1000
-        );
-
-        Attack klovenCurse = new Attack(
-                "Kloven Curse",
-                33,
-                67,
-                Type.FIRE
-        );
-
-        Attack frallisCharm = new Attack(
-                "Frallis Charm",
-                39,
-                69,
-                Type.ELECTRIC
-        );
-
-        Attack mysschock = new Attack(
-                "Mys schock",
-                97,
-                99,
-                Type.ELECTRIC
-        );
-
-        Attack snailMode = new Attack(
-                "Snail Mode",
-                10,
-                100,
-                Type.NORMAL
-        );
-
-        frallis.attacks.add(snailMode);
-        frallis.attacks.add(mysschock);
-        frallis.attacks.add(frallisCharm);
-        frallis.attacks.add(klovenCurse);
-
-        pokemons.add(frallis);
-
-        Pokemon charmander = new Pokemon(
-                "Charmander",
-                Type.FIRE,
-                90
-        );
-
-        Attack ember = new Attack(
-                "Ember",
-                35,
-                90,
-                Type.FIRE
-        );
-
-        charmander.attacks.add(ember);
-
-        pokemons.add(charmander);
-
-        Pokemon squirtle = new Pokemon(
-                "Squirtle",
-                Type.WATER,
-                95
-        );
-
-        Attack waterGun = new Attack(
-                "Water Gun",
-                35,
-                95,
-                Type.WATER
-        );
-
-        squirtle.attacks.add(waterGun);
-
-        pokemons.add(squirtle);
-
-        Pokemon snorlax = new Pokemon(
-                "Snorlax",
-                Type.NORMAL,
-                160
-        );
-
-        Attack bodySlam = new Attack(
-                "Body Slam",
-                50,
-                85,
-                Type.NORMAL
-        );
-
-        snorlax.attacks.add(bodySlam);
-
-        pokemons.add(snorlax);
-
-        Pokemon pikachu = new Pokemon(
-                "Pikachu",
-                Type.ELECTRIC,
-                100
-        );
-
-        Attack thunderShock = new Attack(
-                "Thunder Shock",
-                40,
-                90,
-                Type.ELECTRIC
-        );
-
-        pikachu.attacks.add(thunderShock);
-
-        pokemons.add(pikachu);
-
-        Pokemon bulbasaur = new Pokemon(
-                "Bulbasaur",
-                Type.GRASS,
-                90
-        );
-
-        Attack vineWhip = new Attack(
-                "Vine Whip",
-                35,
-                95,
-                Type.GRASS
-        );
-
-        bulbasaur.attacks.add(vineWhip);
-
-        pokemons.add(bulbasaur);
-
-        Pokemon roffeMannen = new Pokemon(
-                "RoffeMannen",
-                Type.NORMAL,
-                120
-        );
-
-        Attack roffeSmash = new Attack(
-                "Roffe Smash",
-                45,
-                90,
-                Type.NORMAL
-        );
-
-        Attack sockSteal = new Attack(
-                "Sock Steal",
-                30,
-                95,
-                Type.NORMAL
-        );
-
-        Attack zoomies = new Attack(
-                "Zoomies",
-                25,
-                100,
-                Type.NORMAL
-        );
-
-        Attack stinkBomb = new Attack(
-                "Stink Bomb",
-                40,
-                85,
-                Type.NORMAL
-        );
-
-        roffeMannen.attacks.add(roffeSmash);
-        roffeMannen.attacks.add(sockSteal);
-        roffeMannen.attacks.add(zoomies);
-        roffeMannen.attacks.add(stinkBomb);
-
-        pokemons.add(roffeMannen);
-
-        Pokemon ivyCow = new Pokemon(
-                "Ivy Cow",
-                Type.GRASS,
-                110
-        );
-
-        Attack grassAttack = new Attack(
-                "Grass Attack",
-                35,
-                95,
-                Type.GRASS
-        );
-
-        Attack salamanderAttack = new Attack(
-                "Salamander Attack",
-                40,
-                90,
-                Type.FIRE
-        );
-
-        Attack cinnamonbunRoll = new Attack(
-                "Cinnamonbun Roll",
-                30,
-                100,
-                Type.NORMAL
-        );
-
-        ivyCow.attacks.add(grassAttack);
-        ivyCow.attacks.add(salamanderAttack);
-        ivyCow.attacks.add(cinnamonbunRoll);
-
-        pokemons.add(ivyCow);
     }
 }

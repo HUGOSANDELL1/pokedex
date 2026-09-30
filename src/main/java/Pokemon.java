@@ -3,13 +3,13 @@ import java.util.ArrayList;
 public class Pokemon {
 
     // Basic information about a Pokemon
-    public String name;
-    public Type type;
-    public int maxHp;
-    public int currentHp;
+    private String name;
+    private Type type;
+    private int maxHp;
+    private int currentHp;
 
     // List of attacks the Pokemon has
-    public ArrayList<Attack> attacks = new ArrayList<>();
+    private ArrayList<Attack> attacks = new ArrayList<>();
 
     // Empty constructor used when loading JSON
     public Pokemon() {
@@ -21,5 +21,40 @@ public class Pokemon {
         this.type = type;
         this.maxHp = maxHp;
         this.currentHp = maxHp;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public int getCurrentHp() {
+        return currentHp;
+    }
+
+    public ArrayList<Attack> getAttacks() {
+        return attacks;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+    }
+
+    public void setCurrentHp(int currentHp) {
+        this.currentHp = currentHp;
     }
 }
