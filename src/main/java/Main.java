@@ -45,7 +45,7 @@ public class Main {
             System.out.println("12. Exit");
 
             // Reads a valid menu choice between 1 and 12
-            int choice = readIntInRange(scanner, "Choice: ", 1, 12);
+            int choice = InputHelper.readIntInRange(scanner, "Choice: ", 1, 12);
 
             switch (choice) {
 
@@ -76,9 +76,9 @@ public class Main {
                     // Add new Pokemon
                 case 2:
                     System.out.println("Add Pokemon");
-                    String name = readValidName(scanner, "Pokemon name: ");
+                    String name = InputHelper.readValidName(scanner, "Pokemon name: ");
 
-                    int hp = readIntInRange(scanner, "HP: ", 1, 1000);
+                    int hp = InputHelper.readIntInRange(scanner, "HP: ", 1, 1000);
 
                     // Let the user choose the Pokemon type
                     System.out.println("Choose Pokemon type:");
@@ -88,7 +88,7 @@ public class Main {
                     System.out.println("4. ELECTRIC");
                     System.out.println("5. NORMAL");
 
-                    int typeChoice = readIntInRange(scanner, "Type: ", 1, 5);
+                    int typeChoice = InputHelper.readIntInRange(scanner, "Type: ", 1, 5);
 
                     Type type = switch (typeChoice) {
                         case 1 -> Type.FIRE;
@@ -101,7 +101,7 @@ public class Main {
                     // Create a new Pokemon object and add it to the Pokedex
                     Pokemon newPokemon = new Pokemon(name, type, hp);
 
-                    int numberOfAttacks = readIntInRange(
+                    int numberOfAttacks = InputHelper.readIntInRange(
                             scanner,
                             "How many attacks? (1-4): ",
                             1,
@@ -109,19 +109,19 @@ public class Main {
                     );
 
                     for (int i = 0; i < numberOfAttacks; i++) {
-                        String attackName = readValidName(
+                        String attackName = InputHelper.readValidName(
                                 scanner,
                                 "Attack " + (i + 1) + " name: "
                         );
 
-                        int baseDamage = readIntInRange(
+                        int baseDamage = InputHelper.readIntInRange(
                                 scanner,
                                 "Base damage: ",
                                 1,
                                 1000
                         );
 
-                        int accuracy = readIntInRange(
+                        int accuracy = InputHelper.readIntInRange(
                                 scanner,
                                 "Accuracy (1-100): ",
                                 1,
@@ -135,7 +135,7 @@ public class Main {
                         System.out.println("4. ELECTRIC");
                         System.out.println("5. NORMAL");
 
-                        int attackTypeChoice = readIntInRange(
+                        int attackTypeChoice = InputHelper.readIntInRange(
                                 scanner,
                                 "Type: ",
                                 1,
@@ -181,7 +181,7 @@ public class Main {
                         );
                     }
 
-                    int editChoice = readIntInRange(
+                    int editChoice = InputHelper.readIntInRange(
                             scanner,
                             "Choose Pokemon to edit: ",
                             1,
@@ -208,7 +208,7 @@ public class Main {
                     System.out.println("2. Remove attack");
                     System.out.println("3. Keep attacks");
 
-                    int attackEditChoice = readIntInRange(
+                    int attackEditChoice = InputHelper.readIntInRange(
                             scanner,
                             "Choice: ",
                             1,
@@ -220,19 +220,19 @@ public class Main {
                         if (pokemonToEdit.attacks.size() >= 4) {
                             System.out.println("This Pokemon already has 4 attacks.");
                         } else {
-                            String newAttackName = readValidName(
+                            String newAttackName = InputHelper.readValidName(
                                     scanner,
                                     "Attack name: "
                             );
 
-                            int newBaseDamage = readIntInRange(
+                            int newBaseDamage = InputHelper.readIntInRange(
                                     scanner,
                                     "Base damage: ",
                                     1,
                                     1000
                             );
 
-                            int newAccuracy = readIntInRange(
+                            int newAccuracy = InputHelper.readIntInRange(
                                     scanner,
                                     "Accuracy (1-100): ",
                                     1,
@@ -246,7 +246,7 @@ public class Main {
                             System.out.println("4. ELECTRIC");
                             System.out.println("5. NORMAL");
 
-                            int newAttackTypeChoice = readIntInRange(
+                            int newAttackTypeChoice = InputHelper.readIntInRange(
                                     scanner,
                                     "Type: ",
                                     1,
@@ -278,7 +278,7 @@ public class Main {
                         if (pokemonToEdit.attacks.size() <= 1) {
                             System.out.println("A Pokemon must have at least 1 attack.");
                         } else {
-                            int removeAttackChoice = readIntInRange(
+                            int removeAttackChoice = InputHelper.readIntInRange(
                                     scanner,
                                     "Choose attack to remove: ",
                                     1,
@@ -292,9 +292,9 @@ public class Main {
                         }
                     }
 
-                    String newName = readValidName(scanner, "New Pokemon name: ");
+                    String newName = InputHelper.readValidName(scanner, "New Pokemon name: ");
 
-                    int newHp = readIntInRange(scanner, "New HP: ", 1, 1000);
+                    int newHp = InputHelper.readIntInRange(scanner, "New HP: ", 1, 1000);
 
                     // Let the user choose the new Pokemon type
                     System.out.println("Choose Pokemon type:");
@@ -304,7 +304,7 @@ public class Main {
                     System.out.println("4. ELECTRIC");
                     System.out.println("5. NORMAL");
 
-                    int newTypeChoice = readIntInRange(scanner, "Type: ", 1, 5);
+                    int newTypeChoice = InputHelper.readIntInRange(scanner, "Type: ", 1, 5);
 
                     Type newType = switch (newTypeChoice) {
                         case 1 -> Type.FIRE;
@@ -341,7 +341,7 @@ public class Main {
                         );
                     }
 
-                    int removeChoice = readIntInRange(
+                    int removeChoice = InputHelper.readIntInRange(
                             scanner,
                             "Choose Pokemon to remove: ",
                             1,
@@ -366,7 +366,7 @@ public class Main {
                     System.out.println("1. Yes");
                     System.out.println("2. No");
 
-                    int resetChoice = readIntInRange(
+                    int resetChoice = InputHelper.readIntInRange(
                             scanner,
                             "Choice: ",
                             1,
@@ -386,7 +386,7 @@ public class Main {
                 case 8:
                     System.out.println("Search Pokemon");
 
-                    String searchName = readValidName(
+                    String searchName = InputHelper.readValidName(
                             scanner,
                             "Enter Pokemon name: "
                     );
@@ -423,7 +423,7 @@ public class Main {
                     System.out.println("4. ELECTRIC");
                     System.out.println("5. NORMAL");
 
-                    int filterTypeChoice = readIntInRange(
+                    int filterTypeChoice = InputHelper.readIntInRange(
                             scanner,
                             "Type: ",
                             1,
@@ -511,53 +511,6 @@ public class Main {
             }
         }
         scanner.close();
-    }
-
-    // Reads an integer and keeps asking until the value is inside the allowed range
-    public static int readIntInRange(Scanner scanner, String message, int min, int max) {
-
-        while (true) {
-            System.out.print(message);
-
-            // Read input as text first so invalid input does not crash the program
-            String input = scanner.nextLine().trim();
-
-            try {
-                int value = Integer.parseInt(input);
-                if (value >= min && value <= max) {
-                    return value;
-                }
-                System.out.println("Enter a number between " + min + " and " + max + ".");
-
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Enter a whole number.");
-            }
-        }
-    }
-
-    public static String readValidName(Scanner scanner, String message) {
-
-        while (true) {
-            System.out.print(message);
-            String input = scanner.nextLine().trim();
-
-            if (input.isEmpty()) {
-                System.out.println("Name cannot be empty.");
-                continue;
-            }
-
-            if (input.length() > 50) {
-                System.out.println("Name is too long. Maximum 50 characters.");
-                continue;
-            }
-
-            if (input.contains(";")) {
-                System.out.println("Name cannot contain ;");
-                continue;
-            }
-
-            return input;
-        }
     }
 
     public static Pokemon findPokemonByName(ArrayList<Pokemon> pokemons, String name) {
