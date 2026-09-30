@@ -439,22 +439,19 @@ public class Main {
                         default -> Type.NORMAL;
                     };
 
-                    boolean foundType = false;
+                    ArrayList<Pokemon> filteredPokemon =
+                            PokedexService.filterByType(pokemons, filterType);
 
-                    for (Pokemon pokemon : pokemons) {
-                        if (pokemon.getType() == filterType) {
+                    if (filteredPokemon.isEmpty()) {
+                        System.out.println("No Pokemon found with that type.");
+                    } else {
+                        for (Pokemon pokemon : filteredPokemon) {
                             System.out.println(
                                     pokemon.getName() +
                                             " - Type: " + pokemon.getType() +
                                             " - HP: " + pokemon.getCurrentHp() + "/" + pokemon.getMaxHp()
                             );
-
-                            foundType = true;
                         }
-                    }
-
-                    if (!foundType) {
-                        System.out.println("No Pokemon found with that type.");
                     }
 
                     break;
@@ -462,9 +459,7 @@ public class Main {
                 case 10:
                     System.out.println("Sort Pokemon by name");
 
-                    pokemons.sort((p1, p2) ->
-                            p1.getName().compareToIgnoreCase(p2.getName())
-                    );
+                    PokedexService.sortByName(pokemons);
 
                     System.out.println("Pokemon sorted by name.");
                     break;
@@ -477,38 +472,33 @@ public class Main {
                         break;
                     }
 
-                    int totalPokemon = pokemons.size();
-                    int totalHp = 0;
+                    double averageHp =
+                            PokedexService.getAverageHp(pokemons);
 
-                    Pokemon highestHpPokemon = pokemons.getFirst();
+                    Pokemon highestHpPokemon =
+                            PokedexService.getHighestHpPokemon(pokemons);
 
-                    for (Pokemon pokemon : pokemons) {
-                        totalHp += pokemon.getMaxHp();
 
-                        if (pokemon.getMaxHp() > highestHpPokemon.getMaxHp()) {
-                            highestHpPokemon = pokemon;
-                        }
+                    System.out.println("Total Pokemon: " + pokemons.size());
+                    System.out.println("Average HP: " + averageHp);
+
+                    if (highestHpPokemon != null) {
+                        System.out.println(
+                                "Highest HP: " +
+                                        highestHpPokemon.getName() +
+                                        " (" + highestHpPokemon.getMaxHp() + ")"
+                        );
                     }
 
-                    double averageHp = (double) totalHp / totalPokemon;
-
-                    System.out.println("Total Pokemon: " + totalPokemon);
-                    System.out.println("Average HP: " + averageHp);
-                    System.out.println(
-                            "Highest HP: " +
-                                    highestHpPokemon.getName() +
-                                    " (" + highestHpPokemon.getMaxHp() + ")"
-                    );
-
                     break;
 
-                    // Stop the while loop and exit the program
-                case 12:
-                    System.out.println("Exit");
-                    PokemonFileManager.savePokemon(pokemons);
-                    running = false;
-                    System.out.println("Goodbye!");
-                    break;
+                        // Stop the while loop and exit the program
+                        case 12:
+                            System.out.println("Exit");
+                            PokemonFileManager.savePokemon(pokemons);
+                            running = false;
+                            System.out.println("Goodbye!");
+                            break;
             }
         }
         scanner.close();
