@@ -11,6 +11,23 @@ public class Attack {
 
     // Creates a new attack with the values above
     public Attack(String name, int baseDamage, int accuracy, Type type) {
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Attack name cannot be empty.");
+        }
+
+        if (baseDamage <= 0) {
+            throw new IllegalArgumentException("Base damage must be greater than 0.");
+        }
+
+        if (accuracy < 1 || accuracy > 100) {
+            throw new IllegalArgumentException("Accuracy must be between 1 and 100.");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("Attack type cannot be null.");
+        }
+
         this.name = name;
         this.baseDamage = baseDamage;
         this.accuracy = accuracy;

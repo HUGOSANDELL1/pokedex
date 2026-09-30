@@ -17,6 +17,19 @@ public class Pokemon {
 
     // Creates a new Pokemon
     public Pokemon(String name, Type type, int maxHp) {
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Pokemon name cannot be empty.");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("Pokemon type cannot be null.");
+        }
+
+        if (maxHp <= 0) {
+            throw new IllegalArgumentException("Pokemon HP must be greater than 0.");
+        }
+
         this.name = name;
         this.type = type;
         this.maxHp = maxHp;
@@ -56,5 +69,25 @@ public class Pokemon {
 
     public void setCurrentHp(int currentHp) {
         this.currentHp = currentHp;
+    }
+
+    public void addAttack(Attack attack) {
+        if (attack == null) {
+            throw new IllegalArgumentException("Attack cannot be null.");
+        }
+
+        if (attacks.size() >= 4) {
+            throw new IllegalArgumentException("A Pokemon can have maximum 4 attacks.");
+        }
+
+        attacks.add(attack);
+    }
+
+    @Override
+    public String toString() {
+        return name +
+                " (" + type +
+                ", " + currentHp +
+                "/" + maxHp + " HP)";
     }
 }
