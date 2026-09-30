@@ -46,7 +46,7 @@ public class PokemonFileManager {
             pokemons.clear();
 
             for (Pokemon pokemon : loadedPokemon) {
-                Main.validatePokemon(pokemon);
+                PokemonService.validatePokemon(pokemon);
                 pokemons.add(pokemon);
             }
 
