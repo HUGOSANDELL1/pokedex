@@ -396,7 +396,7 @@ public class PokedexMenu {
 
                 case 12:
                     System.out.println("Start Battle");
-                    BattleEngine.startBattle(pokemons);
+                    BattleEngine.startBattle(pokemons, scanner);
                     break;
 
                 // Stop the while loop and exit the program
