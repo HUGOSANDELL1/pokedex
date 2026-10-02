@@ -56,18 +56,43 @@ public class Pokemon {
     }
 
     public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Pokemon name cannot be empty.");
+        }
+
+
         this.name = name;
     }
 
     public void setType(Type type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Pokemon type cannot be null.");
+        }
+
         this.type = type;
     }
 
     public void setMaxHp(int maxHp) {
+        if (maxHp <= 0) {
+            throw new IllegalArgumentException("Pokemon HP must be greater than 0.");
+        }
+
         this.maxHp = maxHp;
+
+        if (currentHp > maxHp) {
+            currentHp = maxHp;
+        }
     }
 
     public void setCurrentHp(int currentHp) {
+        if (currentHp < 0) {
+            throw new IllegalArgumentException("Current HP cannot be negative.");
+        }
+
+        if (currentHp > maxHp) {
+            throw new IllegalArgumentException("Current HP cannot be higher than max HP.");
+        }
+
         this.currentHp = currentHp;
     }
 

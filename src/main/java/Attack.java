@@ -50,18 +50,34 @@ public class Attack {
     }
 
     public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Attack name cannot be empty.");
+        }
+
         this.name = name;
     }
 
     public void setBaseDamage(int baseDamage) {
+        if (baseDamage <= 0) {
+            throw new IllegalArgumentException("Base damage must be greater than 0.");
+        }
+
         this.baseDamage = baseDamage;
     }
 
     public void setAccuracy(int accuracy) {
+        if (accuracy < 1 || accuracy > 100) {
+            throw new IllegalArgumentException("Accuracy must be between 1 and 100.");
+        }
+
         this.accuracy = accuracy;
     }
 
     public void setType(Type type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Attack type cannot be null.");
+        }
+
         this.type = type;
     }
 
