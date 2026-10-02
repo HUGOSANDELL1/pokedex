@@ -61,4 +61,27 @@ public class InputHelper {
             return input;
         }
     }
+    public static Type readType(Scanner scanner, String message) {
+
+        System.out.println("1. FIRE");
+        System.out.println("2. WATER");
+        System.out.println("3. GRASS");
+        System.out.println("4. ELECTRIC");
+        System.out.println("5. NORMAL");
+
+        int choice = readIntInRange(
+                scanner,
+                message,
+                1,
+                5
+        );
+
+        return switch (choice) {
+            case 1 -> Type.FIRE;
+            case 2 -> Type.WATER;
+            case 3 -> Type.GRASS;
+            case 4 -> Type.ELECTRIC;
+            default -> Type.NORMAL;
+        };
+    }
 }

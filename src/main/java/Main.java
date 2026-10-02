@@ -82,21 +82,8 @@ public class Main {
 
                     // Let the user choose the Pokemon type
                     System.out.println("Choose Pokemon type:");
-                    System.out.println("1. FIRE");
-                    System.out.println("2. WATER");
-                    System.out.println("3. GRASS");
-                    System.out.println("4. ELECTRIC");
-                    System.out.println("5. NORMAL");
-
-                    int typeChoice = InputHelper.readIntInRange(scanner, "Type: ", 1, 5);
-
-                    Type type = switch (typeChoice) {
-                        case 1 -> Type.FIRE;
-                        case 2 -> Type.WATER;
-                        case 3 -> Type.GRASS;
-                        case 4 -> Type.ELECTRIC;
-                        default -> Type.NORMAL;
-                    };
+                    Type type =
+                            InputHelper.readType(scanner, "Type: ");
 
                     // Create a new Pokemon object and add it to the Pokedex
                     Pokemon newPokemon = new Pokemon(name, type, hp);
@@ -129,28 +116,8 @@ public class Main {
                         );
 
                         System.out.println("Choose attack type:");
-                        System.out.println("1. FIRE");
-                        System.out.println("2. WATER");
-                        System.out.println("3. GRASS");
-                        System.out.println("4. ELECTRIC");
-                        System.out.println("5. NORMAL");
-
-                        int attackTypeChoice = InputHelper.readIntInRange(
-                                scanner,
-                                "Type: ",
-                                1,
-                                5
-                        );
-
-                        Type attackType = switch (attackTypeChoice) {
-                            case 1 -> Type.FIRE;
-                            case 2 -> Type.WATER;
-                            case 3 -> Type.GRASS;
-                            case 4 -> Type.ELECTRIC;
-                            default -> Type.NORMAL;
-                        };
-
-                        // Create the attack and add it to the Pokemon
+                        Type attackType =
+                                InputHelper.readType(scanner, "Type: ");
                         Attack attack = new Attack(
                                 attackName,
                                 baseDamage,
@@ -158,7 +125,7 @@ public class Main {
                                 attackType
                         );
 
-                        newPokemon.getAttacks().add(attack);
+                        newPokemon.addAttack(attack);
                     }
 
                     pokemons.add(newPokemon);
@@ -240,26 +207,8 @@ public class Main {
                             );
 
                             System.out.println("Choose attack type:");
-                            System.out.println("1. FIRE");
-                            System.out.println("2. WATER");
-                            System.out.println("3. GRASS");
-                            System.out.println("4. ELECTRIC");
-                            System.out.println("5. NORMAL");
-
-                            int newAttackTypeChoice = InputHelper.readIntInRange(
-                                    scanner,
-                                    "Type: ",
-                                    1,
-                                    5
-                            );
-
-                            Type newAttackType = switch (newAttackTypeChoice) {
-                                case 1 -> Type.FIRE;
-                                case 2 -> Type.WATER;
-                                case 3 -> Type.GRASS;
-                                case 4 -> Type.ELECTRIC;
-                                default -> Type.NORMAL;
-                            };
+                            Type newAttackType =
+                                    InputHelper.readType(scanner, "Type: ");
 
                             Attack newAttack = new Attack(
                                     newAttackName,
@@ -268,7 +217,7 @@ public class Main {
                                     newAttackType
                             );
 
-                            pokemonToEdit.getAttacks().add(newAttack);
+                            pokemonToEdit.addAttack(newAttack);
 
                             System.out.println(newAttackName + " added!");
                         }
@@ -298,21 +247,9 @@ public class Main {
 
                     // Let the user choose the new Pokemon type
                     System.out.println("Choose Pokemon type:");
-                    System.out.println("1. FIRE");
-                    System.out.println("2. WATER");
-                    System.out.println("3. GRASS");
-                    System.out.println("4. ELECTRIC");
-                    System.out.println("5. NORMAL");
+                    Type newType =
+                            InputHelper.readType(scanner, "Type: ");
 
-                    int newTypeChoice = InputHelper.readIntInRange(scanner, "Type: ", 1, 5);
-
-                    Type newType = switch (newTypeChoice) {
-                        case 1 -> Type.FIRE;
-                        case 2 -> Type.WATER;
-                        case 3 -> Type.GRASS;
-                        case 4 -> Type.ELECTRIC;
-                        default -> Type.NORMAL;
-                    };
 
                     pokemonToEdit.setName(newName);
                     pokemonToEdit.setMaxHp(newHp);
@@ -418,26 +355,8 @@ public class Main {
                 case 9:
                     System.out.println("Filter Pokemon by type");
 
-                    System.out.println("1. FIRE");
-                    System.out.println("2. WATER");
-                    System.out.println("3. GRASS");
-                    System.out.println("4. ELECTRIC");
-                    System.out.println("5. NORMAL");
-
-                    int filterTypeChoice = InputHelper.readIntInRange(
-                            scanner,
-                            "Type: ",
-                            1,
-                            5
-                    );
-
-                    Type filterType = switch (filterTypeChoice) {
-                        case 1 -> Type.FIRE;
-                        case 2 -> Type.WATER;
-                        case 3 -> Type.GRASS;
-                        case 4 -> Type.ELECTRIC;
-                        default -> Type.NORMAL;
-                    };
+                    Type filterType =
+                            InputHelper.readType(scanner, "Type: ");
 
                     ArrayList<Pokemon> filteredPokemon =
                             PokedexService.filterByType(pokemons, filterType);

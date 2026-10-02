@@ -39,10 +39,10 @@ public class PokemonSeeder {
                     Type.NORMAL
             );
 
-            frallis.getAttacks().add(snailMode);
-            frallis.getAttacks().add(mysschock);
-            frallis.getAttacks().add(frallisCharm);
-            frallis.getAttacks().add(klovenCurse);
+            frallis.addAttack(snailMode);
+            frallis.addAttack(mysschock);
+            frallis.addAttack(frallisCharm);
+            frallis.addAttack(klovenCurse);
 
             pokemons.add(frallis);
 
@@ -59,7 +59,7 @@ public class PokemonSeeder {
                     Type.FIRE
             );
 
-            charmander.getAttacks().add(ember);
+            charmander.addAttack(ember);
 
             pokemons.add(charmander);
 
@@ -76,7 +76,7 @@ public class PokemonSeeder {
                     Type.WATER
             );
 
-            squirtle.getAttacks().add(waterGun);
+            squirtle.addAttack(waterGun);
 
             pokemons.add(squirtle);
 
@@ -93,7 +93,7 @@ public class PokemonSeeder {
                     Type.NORMAL
             );
 
-            snorlax.getAttacks().add(bodySlam);
+            snorlax.addAttack(bodySlam);
 
             pokemons.add(snorlax);
 
@@ -110,7 +110,7 @@ public class PokemonSeeder {
                     Type.ELECTRIC
             );
 
-            pikachu.getAttacks().add(thunderShock);
+            pikachu.addAttack(thunderShock);
 
             pokemons.add(pikachu);
 
@@ -127,7 +127,7 @@ public class PokemonSeeder {
                     Type.GRASS
             );
 
-            bulbasaur.getAttacks().add(vineWhip);
+            bulbasaur.addAttack(vineWhip);
 
             pokemons.add(bulbasaur);
 
@@ -165,10 +165,10 @@ public class PokemonSeeder {
                     Type.NORMAL
             );
 
-            roffeMannen.getAttacks().add(roffeSmash);
-            roffeMannen.getAttacks().add(sockSteal);
-            roffeMannen.getAttacks().add(zoomies);
-            roffeMannen.getAttacks().add(stinkBomb);
+            roffeMannen.addAttack(roffeSmash);
+            roffeMannen.addAttack(sockSteal);
+            roffeMannen.addAttack(zoomies);
+            roffeMannen.addAttack(stinkBomb);
 
             pokemons.add(roffeMannen);
 
@@ -199,9 +199,9 @@ public class PokemonSeeder {
                     Type.NORMAL
             );
 
-            ivyCow.getAttacks().add(grassAttack);
-            ivyCow.getAttacks().add(salamanderAttack);
-            ivyCow.getAttacks().add(cinnamonbunRoll);
+            ivyCow.addAttack(grassAttack);
+            ivyCow.addAttack(salamanderAttack);
+            ivyCow.addAttack(cinnamonbunRoll);
 
             pokemons.add(ivyCow);
         }
