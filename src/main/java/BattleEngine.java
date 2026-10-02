@@ -49,15 +49,153 @@ public class BattleEngine {
                 "You chose " + playerPokemon.getName() + "!"
         );
 
+        ArrayList<Pokemon> wildPokemons =
+                createWildPokemonPool();
+
         Random random = new Random();
 
         Pokemon wildPokemon =
-                pokemons.get(random.nextInt(pokemons.size()));
+                wildPokemons.get(random.nextInt(wildPokemons.size())
+                );
+
 
         System.out.println(
                 "A wild " + wildPokemon.getName() + " appeared!"
         );
 
+        System.out.println("Choose attack:");
+
+        for (int i = 0; i < playerPokemon.getAttacks().size(); i++) {
+            Attack attack = playerPokemon.getAttacks().get(i);
+
+            System.out.println(
+                    (i + 1) + ". " +
+                            attack.getName() +
+                            " - Damage: " + attack.getBaseDamage() +
+                            " - Accuracy: " + attack.getAccuracy() +
+                            " - Type: " + attack.getType()
+            );
+        }
+
+        int attackChoice = InputHelper.readIntInRange(
+                scanner,
+                "Attack: ",
+                1,
+                playerPokemon.getAttacks().size()
+        );
+
+        Attack playerAttack =
+                playerPokemon.getAttacks().get(attackChoice - 1);
+
+        System.out.println(
+                "You chose " + playerAttack.getName() + "!"
+        );
+
+        int hitRoll = random.nextInt(100) + 1;
+
+        if (hitRoll <= playerAttack.getAccuracy()) {
+            System.out.println(
+                    playerPokemon.getName() +
+                            "'s " +
+                            playerAttack.getName() +
+                            " hit!"
+            );
+        } else {
+            System.out.println(
+                    playerPokemon.getName() +
+                            "'s " +
+                            playerAttack.getName() +
+                            " missed!"
+            );
+        }
+
+        Attack cpuAttack =
+                wildPokemon.getAttacks().get(
+                        random.nextInt(wildPokemon.getAttacks().size())
+                );
+
+        System.out.println(
+                wildPokemon.getName() +
+                        " chose " +
+                        cpuAttack.getName() + "!"
+        );
+
+        int cpuHitRoll = random.nextInt(100) + 1;
+
+        if (cpuHitRoll <= cpuAttack.getAccuracy()) {
+            System.out.println(
+                    wildPokemon.getName() +
+                            "'s " +
+                            cpuAttack.getName() +
+                            " hit!"
+            );
+        } else {
+            System.out.println(
+                    wildPokemon.getName() +
+                            "'s " +
+                            cpuAttack.getName() +
+                            " missed!"
+            );
+        }
+
         System.out.println("Battle started!");
+    }
+
+    private static ArrayList<Pokemon> createWildPokemonPool() {
+
+        ArrayList<Pokemon> wildPokemons = new ArrayList<>();
+
+        Pokemon wildBushRat = new Pokemon(
+                "Bush Rat",
+                Type.FIRE,
+                90
+        );
+
+        wildBushRat.addAttack(
+                new Attack(
+                        "Cheese",
+                        32,
+                        90,
+                        Type.FIRE
+                )
+        );
+
+        wildPokemons.add(wildBushRat);
+
+        Pokemon wildRoffo = new Pokemon(
+                "Roffo",
+                Type.WATER,
+                95
+        );
+
+        wildRoffo.addAttack(
+                new Attack(
+                        "Splash",
+                        31,
+                        93,
+                        Type.WATER
+                )
+        );
+
+        wildPokemons.add(wildRoffo);
+
+        Pokemon wildRausabulb = new Pokemon(
+                "Rausabulb",
+                Type.GRASS,
+                92
+        );
+
+        wildRausabulb.addAttack(
+                new Attack(
+                        "Whip vine",
+                        35,
+                        91,
+                        Type.GRASS
+                )
+        );
+
+        wildPokemons.add(wildRausabulb);
+
+        return wildPokemons;
     }
 }
