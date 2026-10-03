@@ -54,151 +54,249 @@ public class BattleEngine {
 
         Random random = new Random();
 
-        Pokemon wildPokemon =
-                wildPokemons.get(random.nextInt(wildPokemons.size())
-                );
+        boolean playerStarts = random.nextBoolean();
 
+        Pokemon wildPokemon =
+                wildPokemons.get(
+                        random.nextInt(wildPokemons.size())
+                );
 
         System.out.println(
                 "A wild " + wildPokemon.getName() + " appeared!"
         );
+
+        if (playerStarts) {
+            System.out.println(
+                    playerPokemon.getName() + " will attack first!"
+            );
+        } else {
+            System.out.println(
+                    wildPokemon.getName() + " will attack first!"
+            );
+        }
 
         System.out.println("Battle started!");
 
         while (playerPokemon.getCurrentHp() > 0 &&
                 wildPokemon.getCurrentHp() > 0) {
 
-            System.out.println("Choose attack:");
+            if (playerStarts) {
 
-            for (int i = 0; i < playerPokemon.getAttacks().size(); i++) {
-                Attack attack = playerPokemon.getAttacks().get(i);
-
-                System.out.println(
-                        (i + 1) + ". " +
-                                attack.getName() +
-                                " - Damage: " + attack.getBaseDamage() +
-                                " - Accuracy: " + attack.getAccuracy() +
-                                " - Type: " + attack.getType()
-                );
-            }
-
-            int attackChoice = InputHelper.readIntInRange(
-                    scanner,
-                    "Attack: ",
-                    1,
-                    playerPokemon.getAttacks().size()
-            );
-
-            Attack playerAttack =
-                    playerPokemon.getAttacks().get(attackChoice - 1);
-
-            System.out.println(
-                    "You chose " + playerAttack.getName() + "!"
-            );
-
-            int hitRoll = random.nextInt(100) + 1;
-
-            if (hitRoll <= playerAttack.getAccuracy()) {
-                System.out.println(
-                        playerPokemon.getName() +
-                                "'s " +
-                                playerAttack.getName() +
-                                " hit!"
+                boolean wildDefeated = playerTurn(
+                        playerPokemon,
+                        wildPokemon,
+                        scanner,
+                        random
                 );
 
-                printTypeEffectiveness(playerAttack, wildPokemon);
+                if (wildDefeated) {
+                    return;
+                }
 
-                int damage = calculateDamage(playerAttack, wildPokemon, random);
-
-                wildPokemon.setCurrentHp(
-                        Math.max(
-                                0,
-                                wildPokemon.getCurrentHp() - damage
-                        )
+                boolean playerDefeated = cpuTurn(
+                        playerPokemon,
+                        wildPokemon,
+                        random
                 );
 
-                System.out.println(
-                        wildPokemon.getName() +
-                                " has " +
-                                wildPokemon.getCurrentHp() +
-                                "/" +
-                                wildPokemon.getMaxHp() +
-                                " HP left."
-                );
+                if (playerDefeated) {
+                    return;
+                }
 
             } else {
-                System.out.println(
-                        playerPokemon.getName() +
-                                "'s " +
-                                playerAttack.getName() +
-                                " missed!"
-                );
-            }
 
-            if (wildPokemon.getCurrentHp() <= 0) {
-                System.out.println(
-                        wildPokemon.getName() + " was defeated!"
+                boolean playerDefeated = cpuTurn(
+                        playerPokemon,
+                        wildPokemon,
+                        random
                 );
-                return;
-            }
 
-            Attack cpuAttack =
-                    wildPokemon.getAttacks().get(
-                            random.nextInt(wildPokemon.getAttacks().size())
-                    );
+                if (playerDefeated) {
+                    return;
+                }
+
+                boolean wildDefeated = playerTurn(
+                        playerPokemon,
+                        wildPokemon,
+                        scanner,
+                        random
+                );
+
+                if (wildDefeated) {
+                    return;
+                }
+            }
+        }
+    }
+
+    private static boolean playerTurn(
+            Pokemon playerPokemon,
+            Pokemon wildPokemon,
+            Scanner scanner,
+            Random random)
+    {
+
+        System.out.println("Choose attack:");
+
+        for (int i = 0; i < playerPokemon.getAttacks().size(); i++) {
+            Attack attack = playerPokemon.getAttacks().get(i);
+
+            System.out.println(
+                    (i + 1) + ". " +
+                            attack.getName() +
+                            " - Damage: " + attack.getBaseDamage() +
+                            " - Accuracy: " + attack.getAccuracy() +
+                            " - Type: " + attack.getType()
+            );
+        }
+
+        int attackChoice = InputHelper.readIntInRange(
+                scanner,
+                "Attack: ",
+                1,
+                playerPokemon.getAttacks().size()
+        );
+
+        Attack playerAttack =
+                playerPokemon.getAttacks().get(attackChoice - 1);
+
+        System.out.println(
+                "You chose " + playerAttack.getName() + "!"
+        );
+
+        int hitRoll = random.nextInt(100) + 1;
+
+        if (hitRoll <= playerAttack.getAccuracy()) {
+
+            System.out.println(
+                    playerPokemon.getName() +
+                            "'s " +
+                            playerAttack.getName() +
+                            " hit!"
+            );
+
+            printTypeEffectiveness(
+                    playerAttack,
+                    wildPokemon
+            );
+
+            int damage = calculateDamage(
+                    playerAttack,
+                    wildPokemon,
+                    random
+            );
+
+            wildPokemon.setCurrentHp(
+                    Math.max(
+                            0,
+                            wildPokemon.getCurrentHp() - damage
+                    )
+            );
 
             System.out.println(
                     wildPokemon.getName() +
-                            " chose " +
-                            cpuAttack.getName() + "!"
+                            " has " +
+                            wildPokemon.getCurrentHp() +
+                            "/" +
+                            wildPokemon.getMaxHp() +
+                            " HP left."
             );
 
-            int cpuHitRoll = random.nextInt(100) + 1;
+        } else {
 
-            if (cpuHitRoll <= cpuAttack.getAccuracy()) {
-                System.out.println(
-                        wildPokemon.getName() +
-                                "'s " +
-                                cpuAttack.getName() +
-                                " hit!"
-                );
+            System.out.println(
+                    playerPokemon.getName() +
+                            "'s " +
+                            playerAttack.getName() +
+                            " missed!"
+            );
+        }
 
-                printTypeEffectiveness(cpuAttack, playerPokemon);
+        if (wildPokemon.getCurrentHp() <= 0) {
+            System.out.println(
+                    wildPokemon.getName() + " was defeated!"
+            );
+            return true;
+        }
 
-                int cpuDamage = calculateDamage(cpuAttack, playerPokemon, random);
+        return false;
+    }
 
-                playerPokemon.setCurrentHp(
-                        Math.max(
-                                0,
-                                playerPokemon.getCurrentHp() - cpuDamage
+    private static boolean cpuTurn(
+            Pokemon playerPokemon,
+            Pokemon wildPokemon,
+            Random random
+    ) {
+
+        Attack cpuAttack =
+                wildPokemon.getAttacks().get(
+                        random.nextInt(
+                                wildPokemon.getAttacks().size()
                         )
                 );
 
-                System.out.println(
-                        playerPokemon.getName() +
-                                " has " +
-                                playerPokemon.getCurrentHp() +
-                                "/" +
-                                playerPokemon.getMaxHp() +
-                                " HP left."
-                );
+        System.out.println(
+                wildPokemon.getName() +
+                        " chose " +
+                        cpuAttack.getName() + "!"
+        );
 
-            } else {
-                System.out.println(
-                        wildPokemon.getName() +
-                                "'s " +
-                                cpuAttack.getName() +
-                                " missed!"
-                );
-            }
+        int cpuHitRoll = random.nextInt(100) + 1;
 
-            if (playerPokemon.getCurrentHp() <= 0) {
-                System.out.println(
-                        playerPokemon.getName() + " was defeated!"
-                );
-                return;
-            }
+        if (cpuHitRoll <= cpuAttack.getAccuracy()) {
+
+            System.out.println(
+                    wildPokemon.getName() +
+                            "'s " +
+                            cpuAttack.getName() +
+                            " hit!"
+            );
+
+            printTypeEffectiveness(
+                    cpuAttack,
+                    playerPokemon
+            );
+
+            int cpuDamage = calculateDamage(
+                    cpuAttack,
+                    playerPokemon,
+                    random
+            );
+
+            playerPokemon.setCurrentHp(
+                    Math.max(
+                            0,
+                            playerPokemon.getCurrentHp() - cpuDamage
+                    )
+            );
+
+            System.out.println(
+                    playerPokemon.getName() +
+                            " has " +
+                            playerPokemon.getCurrentHp() +
+                            "/" +
+                            playerPokemon.getMaxHp() +
+                            " HP left."
+            );
+
+        } else {
+
+            System.out.println(
+                    wildPokemon.getName() +
+                            "'s " +
+                            cpuAttack.getName() +
+                            " missed!"
+            );
         }
+
+        if (playerPokemon.getCurrentHp() <= 0) {
+            System.out.println(
+                    playerPokemon.getName() + " was defeated!"
+            );
+            return true;
+        }
+
+        return false;
     }
 
     private static ArrayList<Pokemon> createWildPokemonPool() {
@@ -264,9 +362,12 @@ public class BattleEngine {
             Pokemon defender,
             Random random
     ) {
-        double effectiveness = getTypeEffectiveness(attack, defender);
 
-        boolean criticalHit = random.nextInt(16) == 0;
+        double effectiveness =
+                getTypeEffectiveness(attack, defender);
+
+        boolean criticalHit =
+                random.nextInt(16) == 0;
 
         double criticalMultiplier = 1.0;
 
@@ -282,7 +383,10 @@ public class BattleEngine {
         );
     }
 
-    private static double getTypeEffectiveness(Attack attack, Pokemon defender) {
+    private static double getTypeEffectiveness(
+            Attack attack,
+            Pokemon defender
+    ) {
 
         if (attack.getType() == Type.FIRE &&
                 defender.getType() == Type.GRASS) {
@@ -320,7 +424,9 @@ public class BattleEngine {
             Attack attack,
             Pokemon defender
     ) {
-        double effectiveness = getTypeEffectiveness(attack, defender);
+
+        double effectiveness =
+                getTypeEffectiveness(attack, defender);
 
         if (effectiveness == 2.0) {
             System.out.println("It's super effective!");
@@ -328,4 +434,4 @@ public class BattleEngine {
             System.out.println("It's not very effective.");
         }
     }
-    }
+}
