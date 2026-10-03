@@ -106,8 +106,9 @@ public class BattleEngine {
                                 " hit!"
                 );
 
+                printTypeEffectiveness(playerAttack, wildPokemon);
 
-                int damage = calculateDamage(playerAttack, wildPokemon);
+                int damage = calculateDamage(playerAttack, wildPokemon, random);
 
                 wildPokemon.setCurrentHp(
                         Math.max(
@@ -162,7 +163,9 @@ public class BattleEngine {
                                 " hit!"
                 );
 
-                int cpuDamage = calculateDamage(cpuAttack, playerPokemon);
+                printTypeEffectiveness(cpuAttack, playerPokemon);
+
+                int cpuDamage = calculateDamage(cpuAttack, playerPokemon, random);
 
                 playerPokemon.setCurrentHp(
                         Math.max(
@@ -198,96 +201,131 @@ public class BattleEngine {
         }
     }
 
-        private static ArrayList<Pokemon> createWildPokemonPool () {
+    private static ArrayList<Pokemon> createWildPokemonPool() {
 
-            ArrayList<Pokemon> wildPokemons = new ArrayList<>();
+        ArrayList<Pokemon> wildPokemons = new ArrayList<>();
 
-            Pokemon wildBushRat = new Pokemon(
+        Pokemon wildBushRat = new Pokemon(
                 "Bush Rat",
                 Type.FIRE,
                 90
-            );
+        );
 
-            wildBushRat.addAttack(
-                    new Attack(
-                            "Cheese",
-                            32,
-                            90,
-                            Type.FIRE
-                    )
-            );
+        wildBushRat.addAttack(
+                new Attack(
+                        "Cheese",
+                        32,
+                        90,
+                        Type.FIRE
+                )
+        );
 
-            wildPokemons.add(wildBushRat);
+        wildPokemons.add(wildBushRat);
 
-            Pokemon wildRoffo = new Pokemon(
-                    "Roffo",
-                    Type.WATER,
-                    95
-            );
+        Pokemon wildRoffo = new Pokemon(
+                "Roffo",
+                Type.WATER,
+                95
+        );
 
-            wildRoffo.addAttack(
-                    new Attack(
-                            "Splash",
-                            31,
-                            93,
-                            Type.WATER
-                    )
-            );
+        wildRoffo.addAttack(
+                new Attack(
+                        "Splash",
+                        31,
+                        93,
+                        Type.WATER
+                )
+        );
 
-            wildPokemons.add(wildRoffo);
+        wildPokemons.add(wildRoffo);
 
-            Pokemon wildRausabulb = new Pokemon(
-                    "Rausabulb",
-                    Type.GRASS,
-                    92
-            );
+        Pokemon wildRausabulb = new Pokemon(
+                "Rausabulb",
+                Type.GRASS,
+                92
+        );
 
-            wildRausabulb.addAttack(
-                    new Attack(
-                            "Whip vine",
-                            35,
-                            91,
-                            Type.GRASS
-                    )
-            );
+        wildRausabulb.addAttack(
+                new Attack(
+                        "Whip vine",
+                        35,
+                        91,
+                        Type.GRASS
+                )
+        );
 
-            wildPokemons.add(wildRausabulb);
+        wildPokemons.add(wildRausabulb);
 
-            return wildPokemons;
+        return wildPokemons;
+    }
+
+    private static int calculateDamage(
+            Attack attack,
+            Pokemon defender,
+            Random random
+    ) {
+        double effectiveness = getTypeEffectiveness(attack, defender);
+
+        boolean criticalHit = random.nextInt(16) == 0;
+
+        double criticalMultiplier = 1.0;
+
+        if (criticalHit) {
+            criticalMultiplier = 2.0;
+            System.out.println("Critical hit!");
         }
-        private static int calculateDamage (Attack attack, Pokemon defender){
 
-            double effectiveness = 1.0;
+        return (int) (
+                attack.getBaseDamage() *
+                        effectiveness *
+                        criticalMultiplier
+        );
+    }
 
-            if (attack.getType() == Type.FIRE &&
-                    defender.getType() == Type.GRASS) {
-                effectiveness = 2.0;
+    private static double getTypeEffectiveness(Attack attack, Pokemon defender) {
 
-            } else if (attack.getType() == Type.WATER &&
-                    defender.getType() == Type.FIRE) {
-                effectiveness = 2.0;
+        if (attack.getType() == Type.FIRE &&
+                defender.getType() == Type.GRASS) {
+            return 2.0;
 
-            } else if (attack.getType() == Type.GRASS &&
-                    defender.getType() == Type.WATER) {
-                effectiveness = 2.0;
+        } else if (attack.getType() == Type.WATER &&
+                defender.getType() == Type.FIRE) {
+            return 2.0;
 
-            } else if (attack.getType() == Type.ELECTRIC &&
-                    defender.getType() == Type.WATER) {
-                effectiveness = 2.0;
+        } else if (attack.getType() == Type.GRASS &&
+                defender.getType() == Type.WATER) {
+            return 2.0;
 
-            } else if (attack.getType() == Type.FIRE &&
-                    defender.getType() == Type.WATER) {
-                effectiveness = 0.5;
+        } else if (attack.getType() == Type.ELECTRIC &&
+                defender.getType() == Type.WATER) {
+            return 2.0;
 
-            } else if (attack.getType() == Type.WATER &&
-                    defender.getType() == Type.GRASS) {
-                effectiveness = 0.5;
+        } else if (attack.getType() == Type.FIRE &&
+                defender.getType() == Type.WATER) {
+            return 0.5;
 
-            } else if (attack.getType() == Type.GRASS &&
-                    defender.getType() == Type.FIRE) {
-                effectiveness = 0.5;
-            }
+        } else if (attack.getType() == Type.WATER &&
+                defender.getType() == Type.GRASS) {
+            return 0.5;
 
-        return (int) (attack.getBaseDamage() * effectiveness);
+        } else if (attack.getType() == Type.GRASS &&
+                defender.getType() == Type.FIRE) {
+            return 0.5;
         }
+
+        return 1.0;
+    }
+
+    private static void printTypeEffectiveness(
+            Attack attack,
+            Pokemon defender
+    ) {
+        double effectiveness = getTypeEffectiveness(attack, defender);
+
+        if (effectiveness == 2.0) {
+            System.out.println("It's super effective!");
+        } else if (effectiveness == 0.5) {
+            System.out.println("It's not very effective.");
+        }
+    }
     }
