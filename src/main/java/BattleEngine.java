@@ -63,195 +63,231 @@ public class BattleEngine {
                 "A wild " + wildPokemon.getName() + " appeared!"
         );
 
-        System.out.println("Choose attack:");
+        System.out.println("Battle started!");
 
-        for (int i = 0; i < playerPokemon.getAttacks().size(); i++) {
-            Attack attack = playerPokemon.getAttacks().get(i);
+        while (playerPokemon.getCurrentHp() > 0 &&
+                wildPokemon.getCurrentHp() > 0) {
+
+            System.out.println("Choose attack:");
+
+            for (int i = 0; i < playerPokemon.getAttacks().size(); i++) {
+                Attack attack = playerPokemon.getAttacks().get(i);
+
+                System.out.println(
+                        (i + 1) + ". " +
+                                attack.getName() +
+                                " - Damage: " + attack.getBaseDamage() +
+                                " - Accuracy: " + attack.getAccuracy() +
+                                " - Type: " + attack.getType()
+                );
+            }
+
+            int attackChoice = InputHelper.readIntInRange(
+                    scanner,
+                    "Attack: ",
+                    1,
+                    playerPokemon.getAttacks().size()
+            );
+
+            Attack playerAttack =
+                    playerPokemon.getAttacks().get(attackChoice - 1);
 
             System.out.println(
-                    (i + 1) + ". " +
-                            attack.getName() +
-                            " - Damage: " + attack.getBaseDamage() +
-                            " - Accuracy: " + attack.getAccuracy() +
-                            " - Type: " + attack.getType()
-            );
-        }
-
-        int attackChoice = InputHelper.readIntInRange(
-                scanner,
-                "Attack: ",
-                1,
-                playerPokemon.getAttacks().size()
-        );
-
-        Attack playerAttack =
-                playerPokemon.getAttacks().get(attackChoice - 1);
-
-        System.out.println(
-                "You chose " + playerAttack.getName() + "!"
-        );
-
-        int hitRoll = random.nextInt(100) + 1;
-
-        if (hitRoll <= playerAttack.getAccuracy()) {
-            System.out.println(
-                    playerPokemon.getName() +
-                            "'s " +
-                            playerAttack.getName() +
-                            " hit!"
+                    "You chose " + playerAttack.getName() + "!"
             );
 
+            int hitRoll = random.nextInt(100) + 1;
 
-            int damage = calculateDamage(playerAttack);
-
-            wildPokemon.setCurrentHp(
-                    Math.max(
-                            0,
-                            wildPokemon.getCurrentHp() - damage
-                    )
-            );
-
-            System.out.println(
-                    wildPokemon.getName() +
-                            " has " +
-                            wildPokemon.getCurrentHp() +
-                            "/" +
-                            wildPokemon.getMaxHp() +
-                            " HP left."
-            );
-
-        } else {
-            System.out.println(
-                    playerPokemon.getName() +
-                            "'s " +
-                            playerAttack.getName() +
-                            " missed!"
-            );
-        }
-
-        if (wildPokemon.getCurrentHp() <= 0) {
-            System.out.println(
-                    wildPokemon.getName() + " was defeated!"
-            );
-            return;
-        }
-
-        Attack cpuAttack =
-                wildPokemon.getAttacks().get(
-                        random.nextInt(wildPokemon.getAttacks().size())
+            if (hitRoll <= playerAttack.getAccuracy()) {
+                System.out.println(
+                        playerPokemon.getName() +
+                                "'s " +
+                                playerAttack.getName() +
+                                " hit!"
                 );
 
-        System.out.println(
-                wildPokemon.getName() +
-                        " chose " +
-                        cpuAttack.getName() + "!"
-        );
 
-        int cpuHitRoll = random.nextInt(100) + 1;
+                int damage = calculateDamage(playerAttack, wildPokemon);
 
-        if (cpuHitRoll <= cpuAttack.getAccuracy()) {
+                wildPokemon.setCurrentHp(
+                        Math.max(
+                                0,
+                                wildPokemon.getCurrentHp() - damage
+                        )
+                );
+
+                System.out.println(
+                        wildPokemon.getName() +
+                                " has " +
+                                wildPokemon.getCurrentHp() +
+                                "/" +
+                                wildPokemon.getMaxHp() +
+                                " HP left."
+                );
+
+            } else {
+                System.out.println(
+                        playerPokemon.getName() +
+                                "'s " +
+                                playerAttack.getName() +
+                                " missed!"
+                );
+            }
+
+            if (wildPokemon.getCurrentHp() <= 0) {
+                System.out.println(
+                        wildPokemon.getName() + " was defeated!"
+                );
+                return;
+            }
+
+            Attack cpuAttack =
+                    wildPokemon.getAttacks().get(
+                            random.nextInt(wildPokemon.getAttacks().size())
+                    );
+
             System.out.println(
                     wildPokemon.getName() +
-                            "'s " +
-                            cpuAttack.getName() +
-                            " hit!"
+                            " chose " +
+                            cpuAttack.getName() + "!"
             );
 
-            int cpuDamage = calculateDamage(cpuAttack);
+            int cpuHitRoll = random.nextInt(100) + 1;
 
-            playerPokemon.setCurrentHp(
-                    Math.max(
-                            0,
-                            playerPokemon.getCurrentHp() - cpuDamage
-                    )
-            );
+            if (cpuHitRoll <= cpuAttack.getAccuracy()) {
+                System.out.println(
+                        wildPokemon.getName() +
+                                "'s " +
+                                cpuAttack.getName() +
+                                " hit!"
+                );
 
-            System.out.println(
-                    playerPokemon.getName() +
-                            " has " +
-                            playerPokemon.getCurrentHp() +
-                            "/" +
-                            playerPokemon.getMaxHp() +
-                            " HP left."
-            );
+                int cpuDamage = calculateDamage(cpuAttack, playerPokemon);
 
-        } else {
-            System.out.println(
-                    wildPokemon.getName() +
-                            "'s " +
-                            cpuAttack.getName() +
-                            " missed!"
-            );
+                playerPokemon.setCurrentHp(
+                        Math.max(
+                                0,
+                                playerPokemon.getCurrentHp() - cpuDamage
+                        )
+                );
+
+                System.out.println(
+                        playerPokemon.getName() +
+                                " has " +
+                                playerPokemon.getCurrentHp() +
+                                "/" +
+                                playerPokemon.getMaxHp() +
+                                " HP left."
+                );
+
+            } else {
+                System.out.println(
+                        wildPokemon.getName() +
+                                "'s " +
+                                cpuAttack.getName() +
+                                " missed!"
+                );
+            }
+
+            if (playerPokemon.getCurrentHp() <= 0) {
+                System.out.println(
+                        playerPokemon.getName() + " was defeated!"
+                );
+                return;
+            }
         }
-
-        if (playerPokemon.getCurrentHp() <= 0) {
-            System.out.println(
-                    playerPokemon.getName() + " was defeated!"
-            );
-            return;
-        }
-
-        System.out.println("Battle started!");
     }
 
-    private static ArrayList<Pokemon> createWildPokemonPool() {
+        private static ArrayList<Pokemon> createWildPokemonPool () {
 
-        ArrayList<Pokemon> wildPokemons = new ArrayList<>();
+            ArrayList<Pokemon> wildPokemons = new ArrayList<>();
 
-        Pokemon wildBushRat = new Pokemon(
+            Pokemon wildBushRat = new Pokemon(
                 "Bush Rat",
                 Type.FIRE,
                 90
-        );
+            );
 
-        wildBushRat.addAttack(
-                new Attack(
-                        "Cheese",
-                        32,
-                        90,
-                        Type.FIRE
-                )
-        );
+            wildBushRat.addAttack(
+                    new Attack(
+                            "Cheese",
+                            32,
+                            90,
+                            Type.FIRE
+                    )
+            );
 
-        wildPokemons.add(wildBushRat);
+            wildPokemons.add(wildBushRat);
 
-        Pokemon wildRoffo = new Pokemon(
-                "Roffo",
-                Type.WATER,
-                95
-        );
+            Pokemon wildRoffo = new Pokemon(
+                    "Roffo",
+                    Type.WATER,
+                    95
+            );
 
-        wildRoffo.addAttack(
-                new Attack(
-                        "Splash",
-                        31,
-                        93,
-                        Type.WATER
-                )
-        );
+            wildRoffo.addAttack(
+                    new Attack(
+                            "Splash",
+                            31,
+                            93,
+                            Type.WATER
+                    )
+            );
 
-        wildPokemons.add(wildRoffo);
+            wildPokemons.add(wildRoffo);
 
-        Pokemon wildRausabulb = new Pokemon(
-                "Rausabulb",
-                Type.GRASS,
-                92
-        );
+            Pokemon wildRausabulb = new Pokemon(
+                    "Rausabulb",
+                    Type.GRASS,
+                    92
+            );
 
-        wildRausabulb.addAttack(
-                new Attack(
-                        "Whip vine",
-                        35,
-                        91,
-                        Type.GRASS
-                )
-        );
+            wildRausabulb.addAttack(
+                    new Attack(
+                            "Whip vine",
+                            35,
+                            91,
+                            Type.GRASS
+                    )
+            );
 
-        wildPokemons.add(wildRausabulb);
+            wildPokemons.add(wildRausabulb);
 
-        return wildPokemons;
+            return wildPokemons;
+        }
+        private static int calculateDamage (Attack attack, Pokemon defender){
+
+            double effectiveness = 1.0;
+
+            if (attack.getType() == Type.FIRE &&
+                    defender.getType() == Type.GRASS) {
+                effectiveness = 2.0;
+
+            } else if (attack.getType() == Type.WATER &&
+                    defender.getType() == Type.FIRE) {
+                effectiveness = 2.0;
+
+            } else if (attack.getType() == Type.GRASS &&
+                    defender.getType() == Type.WATER) {
+                effectiveness = 2.0;
+
+            } else if (attack.getType() == Type.ELECTRIC &&
+                    defender.getType() == Type.WATER) {
+                effectiveness = 2.0;
+
+            } else if (attack.getType() == Type.FIRE &&
+                    defender.getType() == Type.WATER) {
+                effectiveness = 0.5;
+
+            } else if (attack.getType() == Type.WATER &&
+                    defender.getType() == Type.GRASS) {
+                effectiveness = 0.5;
+
+            } else if (attack.getType() == Type.GRASS &&
+                    defender.getType() == Type.FIRE) {
+                effectiveness = 0.5;
+            }
+
+        return (int) (attack.getBaseDamage() * effectiveness);
+        }
     }
-    private static int calculateDamage(Attack attack) {
-        return attack.getBaseDamage();
-    }
-}
