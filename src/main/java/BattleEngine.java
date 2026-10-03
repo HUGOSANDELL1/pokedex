@@ -100,6 +100,26 @@ public class BattleEngine {
                             playerAttack.getName() +
                             " hit!"
             );
+
+
+            int damage = calculateDamage(playerAttack);
+
+            wildPokemon.setCurrentHp(
+                    Math.max(
+                            0,
+                            wildPokemon.getCurrentHp() - damage
+                    )
+            );
+
+            System.out.println(
+                    wildPokemon.getName() +
+                            " has " +
+                            wildPokemon.getCurrentHp() +
+                            "/" +
+                            wildPokemon.getMaxHp() +
+                            " HP left."
+            );
+
         } else {
             System.out.println(
                     playerPokemon.getName() +
@@ -107,6 +127,13 @@ public class BattleEngine {
                             playerAttack.getName() +
                             " missed!"
             );
+        }
+
+        if (wildPokemon.getCurrentHp() <= 0) {
+            System.out.println(
+                    wildPokemon.getName() + " was defeated!"
+            );
+            return;
         }
 
         Attack cpuAttack =
@@ -129,6 +156,25 @@ public class BattleEngine {
                             cpuAttack.getName() +
                             " hit!"
             );
+
+            int cpuDamage = calculateDamage(cpuAttack);
+
+            playerPokemon.setCurrentHp(
+                    Math.max(
+                            0,
+                            playerPokemon.getCurrentHp() - cpuDamage
+                    )
+            );
+
+            System.out.println(
+                    playerPokemon.getName() +
+                            " has " +
+                            playerPokemon.getCurrentHp() +
+                            "/" +
+                            playerPokemon.getMaxHp() +
+                            " HP left."
+            );
+
         } else {
             System.out.println(
                     wildPokemon.getName() +
@@ -136,6 +182,13 @@ public class BattleEngine {
                             cpuAttack.getName() +
                             " missed!"
             );
+        }
+
+        if (playerPokemon.getCurrentHp() <= 0) {
+            System.out.println(
+                    playerPokemon.getName() + " was defeated!"
+            );
+            return;
         }
 
         System.out.println("Battle started!");
@@ -197,5 +250,8 @@ public class BattleEngine {
         wildPokemons.add(wildRausabulb);
 
         return wildPokemons;
+    }
+    private static int calculateDamage(Attack attack) {
+        return attack.getBaseDamage();
     }
 }
