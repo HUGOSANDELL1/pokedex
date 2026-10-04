@@ -186,6 +186,13 @@ public class BattleEngine {
                     random
             );
 
+            System.out.println(
+                    wildPokemon.getName() +
+                            " took " +
+                            damage +
+                            " damage."
+            );
+
             wildPokemon.setCurrentHp(
                     Math.max(
                             0,
@@ -261,6 +268,13 @@ public class BattleEngine {
                     cpuAttack,
                     playerPokemon,
                     random
+            );
+
+            System.out.println(
+                    playerPokemon.getName() +
+                            " took " +
+                            cpuDamage +
+                            " damage."
             );
 
             playerPokemon.setCurrentHp(
@@ -366,6 +380,9 @@ public class BattleEngine {
         double effectiveness =
                 getTypeEffectiveness(attack, defender);
 
+        double randomFactor =
+                0.85 + (random.nextDouble() * 0.15);
+
         boolean criticalHit =
                 random.nextInt(16) == 0;
 
@@ -379,6 +396,7 @@ public class BattleEngine {
         return (int) (
                 attack.getBaseDamage() *
                         effectiveness *
+                        randomFactor *
                         criticalMultiplier
         );
     }
