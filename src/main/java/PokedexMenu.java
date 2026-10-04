@@ -405,6 +405,8 @@ public class PokedexMenu {
                     System.out.println("Battle Results");
                     System.out.println("Wins: " + battleStats.getTotalWins());
                     System.out.println("Losses: " + battleStats.getTotalLosses());
+                    System.out.println("Most used Pokemon: " + battleStats.getMostUsedPokemon());
+                    System.out.println("Most used attack: " + battleStats.getMostUsedAttack());
                     break;
 
                 // Stop the while loop and exit the program

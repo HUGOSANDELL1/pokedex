@@ -35,6 +35,10 @@ public class BattleEngine {
 
         Pokemon playerPokemon = pokemons.get(choice - 1);
 
+        battleStats.recordPokemonUse(
+                playerPokemon.getName()
+        );
+
         if (playerPokemon.getAttacks().isEmpty()) {
             System.out.println("This Pokemon has no attacks.");
             return;
@@ -164,6 +168,10 @@ public class BattleEngine {
 
         Attack playerAttack =
                 playerPokemon.getAttacks().get(attackChoice - 1);
+
+        battleStats.recordAttackUse(
+                playerAttack.getName()
+        );
 
         System.out.println(
                 "You chose " + playerAttack.getName() + "!"
