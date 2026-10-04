@@ -6,6 +6,7 @@ public class PokedexMenu {
     public static void start(ArrayList<Pokemon> pokemons) {
        // Scanner is used to read input from the user
         Scanner scanner = new Scanner(System.in);
+        BattleStats battleStats = BattleStatsFileManager.loadBattleStats();
 
         boolean running = true;
         while (running) {
@@ -25,10 +26,11 @@ public class PokedexMenu {
             System.out.println("10. Sort by name");
             System.out.println("11. Statistics");
             System.out.println("12. Start Battle");
-            System.out.println("13. Exit");
+            System.out.println("13. Battle Results");
+            System.out.println("14. Exit");
 
             // Reads a valid menu choice between 1 and 12
-            int choice = InputHelper.readIntInRange(scanner, "Choice: ", 1, 13);
+            int choice = InputHelper.readIntInRange(scanner, "Choice: ", 1, 14);
 
             switch (choice) {
 
@@ -396,13 +398,21 @@ public class PokedexMenu {
 
                 case 12:
                     System.out.println("Start Battle");
-                    BattleEngine.startBattle(pokemons, scanner);
+                    BattleEngine.startBattle(pokemons, scanner, battleStats);
+                    break;
+
+                    case 13:
+                    System.out.println("Battle Results");
+                    System.out.println("Wins: " + battleStats.getTotalWins());
+                    System.out.println("Losses: " + battleStats.getTotalLosses());
                     break;
 
                 // Stop the while loop and exit the program
-                case 13:
+                case 14:
                     System.out.println("Exit");
                     PokemonFileManager.savePokemon(pokemons);
+
+                    BattleStatsFileManager.saveBattleStats(battleStats);
                     running = false;
                     System.out.println("Goodbye!");
                     break;

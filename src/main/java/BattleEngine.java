@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BattleEngine {
 
-    public static void startBattle(ArrayList<Pokemon> pokemons, Scanner scanner) {
+    public static void startBattle(ArrayList<Pokemon> pokemons, Scanner scanner, BattleStats battleStats) {
 
         if (pokemons.isEmpty()) {
             System.out.println("You do not own any Pokemon.");
@@ -86,7 +86,8 @@ public class BattleEngine {
                         playerPokemon,
                         wildPokemon,
                         scanner,
-                        random
+                        random,
+                        battleStats
                 );
 
                 if (wildDefeated) {
@@ -96,7 +97,8 @@ public class BattleEngine {
                 boolean playerDefeated = cpuTurn(
                         playerPokemon,
                         wildPokemon,
-                        random
+                        random,
+                        battleStats
                 );
 
                 if (playerDefeated) {
@@ -108,7 +110,8 @@ public class BattleEngine {
                 boolean playerDefeated = cpuTurn(
                         playerPokemon,
                         wildPokemon,
-                        random
+                        random,
+                        battleStats
                 );
 
                 if (playerDefeated) {
@@ -119,7 +122,8 @@ public class BattleEngine {
                         playerPokemon,
                         wildPokemon,
                         scanner,
-                        random
+                        random,
+                        battleStats
                 );
 
                 if (wildDefeated) {
@@ -133,7 +137,8 @@ public class BattleEngine {
             Pokemon playerPokemon,
             Pokemon wildPokemon,
             Scanner scanner,
-            Random random)
+            Random random,
+            BattleStats battleStats)
     {
 
         System.out.println("Choose attack:");
@@ -223,6 +228,9 @@ public class BattleEngine {
             System.out.println(
                     wildPokemon.getName() + " was defeated!"
             );
+
+            battleStats.addWin();
+
             return true;
         }
 
@@ -232,7 +240,8 @@ public class BattleEngine {
     private static boolean cpuTurn(
             Pokemon playerPokemon,
             Pokemon wildPokemon,
-            Random random
+            Random random,
+            BattleStats battleStats
     ) {
 
         Attack cpuAttack =
@@ -307,6 +316,7 @@ public class BattleEngine {
             System.out.println(
                     playerPokemon.getName() + " was defeated!"
             );
+            battleStats.addLoss();
             return true;
         }
 
