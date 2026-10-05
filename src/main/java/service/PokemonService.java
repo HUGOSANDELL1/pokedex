@@ -1,3 +1,7 @@
+package service;
+
+import model.Pokemon;
+
 import java.util.ArrayList;
 
 public class PokemonService {

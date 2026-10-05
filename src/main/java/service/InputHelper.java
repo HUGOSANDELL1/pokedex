@@ -1,3 +1,7 @@
+package service;
+
+import model.Type;
+
 import java.util.Scanner;
 
 public class InputHelper {

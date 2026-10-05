@@ -1,3 +1,11 @@
+package service;
+
+import model.Attack;
+import model.BattleStats;
+import model.Pokemon;
+import model.Type;
+import model.DamageAttack;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
@@ -206,11 +214,10 @@ public class BattleEngine {
                             " damage."
             );
 
-            wildPokemon.setCurrentHp(
-                    Math.max(
-                            0,
-                            wildPokemon.getCurrentHp() - damage
-                    )
+            playerAttack.execute(
+                    playerPokemon,
+                    wildPokemon,
+                    damage
             );
 
             System.out.println(
@@ -236,6 +243,8 @@ public class BattleEngine {
             System.out.println(
                     wildPokemon.getName() + " was defeated!"
             );
+
+            System.out.println("You won the battle!");
 
             battleStats.addWin();
 
@@ -298,11 +307,10 @@ public class BattleEngine {
                             " damage."
             );
 
-            playerPokemon.setCurrentHp(
-                    Math.max(
-                            0,
-                            playerPokemon.getCurrentHp() - cpuDamage
-                    )
+            cpuAttack.execute(
+                    wildPokemon,
+                    playerPokemon,
+                    cpuDamage
             );
 
             System.out.println(
@@ -328,6 +336,9 @@ public class BattleEngine {
             System.out.println(
                     playerPokemon.getName() + " was defeated!"
             );
+
+            System.out.println("You lost the battle.");
+
             battleStats.addLoss();
             battleStats.addPokemonLoss(
                     playerPokemon.getName()
@@ -349,7 +360,7 @@ public class BattleEngine {
         );
 
         wildBushRat.addAttack(
-                new Attack(
+                new DamageAttack(
                         "Cheese",
                         32,
                         90,
@@ -366,7 +377,7 @@ public class BattleEngine {
         );
 
         wildRoffo.addAttack(
-                new Attack(
+                new DamageAttack(
                         "Splash",
                         31,
                         93,
@@ -383,7 +394,7 @@ public class BattleEngine {
         );
 
         wildRausabulb.addAttack(
-                new Attack(
+                new DamageAttack(
                         "Whip vine",
                         35,
                         91,

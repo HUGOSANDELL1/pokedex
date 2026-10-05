@@ -1,4 +1,21 @@
-public class Attack {
+package model;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "attackType",
+        defaultImpl = DamageAttack.class
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(
+                value = DamageAttack.class,
+                name = "damage"
+        )
+})
+
+public abstract class Attack {
     // Stores information about an attack
     private String name;
     private int baseDamage;
@@ -88,4 +105,5 @@ public class Attack {
                 " | Accuracy: " + accuracy +
                 " | Type: " + type;
     }
+    public abstract void execute(Pokemon attacker, Pokemon defender, int damage);
 }

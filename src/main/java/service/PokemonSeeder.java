@@ -1,3 +1,10 @@
+package service;
+
+import model.Attack;
+import model.Pokemon;
+import model.Type;
+import model.DamageAttack;
+
 import java.util.ArrayList;
 
 public class PokemonSeeder {
@@ -11,28 +18,28 @@ public class PokemonSeeder {
                     1000
             );
 
-            Attack klovenCurse = new Attack(
+            Attack klovenCurse = new DamageAttack(
                     "Kloven Curse",
                     33,
                     67,
                     Type.FIRE
             );
 
-            Attack frallisCharm = new Attack(
+            Attack frallisCharm = new DamageAttack(
                     "Frallis Charm",
                     39,
                     69,
                     Type.ELECTRIC
             );
 
-            Attack mysschock = new Attack(
+            Attack mysschock = new DamageAttack(
                     "Mys schock",
                     97,
                     99,
                     Type.ELECTRIC
             );
 
-            Attack snailMode = new Attack(
+            Attack snailMode = new DamageAttack(
                     "Snail Mode",
                     10,
                     100,
@@ -52,7 +59,7 @@ public class PokemonSeeder {
                     90
             );
 
-            Attack ember = new Attack(
+            Attack ember = new DamageAttack(
                     "Ember",
                     35,
                     90,
@@ -69,7 +76,7 @@ public class PokemonSeeder {
                     95
             );
 
-            Attack waterGun = new Attack(
+            Attack waterGun = new DamageAttack(
                     "Water Gun",
                     35,
                     95,
@@ -86,7 +93,7 @@ public class PokemonSeeder {
                     160
             );
 
-            Attack bodySlam = new Attack(
+            Attack bodySlam = new DamageAttack(
                     "Body Slam",
                     50,
                     85,
@@ -103,7 +110,7 @@ public class PokemonSeeder {
                     100
             );
 
-            Attack thunderShock = new Attack(
+            Attack thunderShock = new DamageAttack(
                     "Thunder Shock",
                     40,
                     90,
@@ -120,7 +127,7 @@ public class PokemonSeeder {
                     90
             );
 
-            Attack vineWhip = new Attack(
+            Attack vineWhip = new DamageAttack(
                     "Vine Whip",
                     35,
                     95,
@@ -137,28 +144,28 @@ public class PokemonSeeder {
                     120
             );
 
-            Attack roffeSmash = new Attack(
+            Attack roffeSmash = new DamageAttack(
                     "Roffe Smash",
                     45,
                     90,
                     Type.NORMAL
             );
 
-            Attack sockSteal = new Attack(
+            Attack sockSteal = new DamageAttack(
                     "Sock Steal",
                     30,
                     95,
                     Type.NORMAL
             );
 
-            Attack zoomies = new Attack(
+            Attack zoomies = new DamageAttack(
                     "Zoomies",
                     25,
                     100,
                     Type.NORMAL
             );
 
-            Attack stinkBomb = new Attack(
+            Attack stinkBomb = new DamageAttack(
                     "Stink Bomb",
                     40,
                     85,
@@ -178,21 +185,21 @@ public class PokemonSeeder {
                     110
             );
 
-            Attack grassAttack = new Attack(
+            Attack grassAttack = new DamageAttack(
                     "Grass Attack",
                     35,
                     95,
                     Type.GRASS
             );
 
-            Attack salamanderAttack = new Attack(
+            Attack salamanderAttack = new DamageAttack(
                     "Salamander Attack",
                     40,
                     90,
                     Type.FIRE
             );
 
-            Attack cinnamonbunRoll = new Attack(
+            Attack cinnamonbunRoll = new DamageAttack(
                     "Cinnamonbun Roll",
                     30,
                     100,

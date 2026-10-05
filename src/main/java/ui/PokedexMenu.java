@@ -1,3 +1,14 @@
+package ui;
+
+import model.Attack;
+import model.BattleStats;
+import model.Pokemon;
+import model.Type;
+import repository.BattleStatsFileManager;
+import repository.PokemonFileManager;
+import service.*;
+import model.DamageAttack;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -103,7 +114,7 @@ public class PokedexMenu {
                         System.out.println("Choose attack type:");
                         Type attackType =
                                 InputHelper.readType(scanner, "Type: ");
-                        Attack attack = new Attack(
+                        Attack attack = new DamageAttack(
                                 attackName,
                                 baseDamage,
                                 accuracy,
@@ -195,7 +206,7 @@ public class PokedexMenu {
                             Type newAttackType =
                                     InputHelper.readType(scanner, "Type: ");
 
-                            Attack newAttack = new Attack(
+                            Attack newAttack = new DamageAttack(
                                     newAttackName,
                                     newBaseDamage,
                                     newAccuracy,

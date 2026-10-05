@@ -1,3 +1,8 @@
+package service;
+
+import model.Pokemon;
+import model.Type;
+
 import java.util.ArrayList;
 
 public class PokedexService {

@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 
 public class Pokemon {
@@ -106,6 +108,14 @@ public class Pokemon {
         }
 
         attacks.add(attack);
+    }
+
+    public void takeDamage(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Damage cannot be negative.");
+        }
+
+        currentHp = Math.max(0, currentHp - amount);
     }
 
     @Override

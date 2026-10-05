@@ -1,5 +1,10 @@
+package repository;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import model.Pokemon;
+import service.PokemonService;
+import service.InvalidPokemonException;
 
 import java.io.IOException;
 import java.nio.file.Files;

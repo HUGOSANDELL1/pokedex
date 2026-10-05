@@ -1,3 +1,5 @@
+package model;
+
 // Different Pokemon types used in the Pokedex
 public enum Type {
     FIRE,
