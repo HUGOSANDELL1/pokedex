@@ -1,5 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class BattleStats {
 
 
@@ -8,6 +10,11 @@ public class BattleStats {
     private Map<String, Integer> pokemonUsage = new HashMap<>();
 
     private Map<String, Integer> attackUsage = new HashMap<>();
+
+    @JsonProperty("pokemonWins")
+    private Map<String, Integer> pokemonWins = new HashMap<>();
+    @JsonProperty("pokemonLosses")
+    private Map<String, Integer> pokemonLosses = new HashMap<>();
 
     public BattleStats() {
         this.totalWins = 0;
@@ -51,6 +58,7 @@ public class BattleStats {
         );
     }
 
+    @JsonIgnore
     public String getMostUsedPokemon() {
         String mostUsed = "None";
         int highestUsage = 0;
@@ -65,6 +73,7 @@ public class BattleStats {
         return mostUsed;
     }
 
+    @JsonIgnore
     public String getMostUsedAttack() {
         String mostUsed = "None";
         int highestUsage = 0;
@@ -77,5 +86,40 @@ public class BattleStats {
         }
 
         return mostUsed;
+    }
+
+    public void addPokemonWin(String pokemonName) {
+        pokemonWins.put(
+                pokemonName,
+                pokemonWins.getOrDefault(pokemonName, 0) + 1
+        );
+    }
+
+    public void addPokemonLoss(String pokemonName) {
+        pokemonLosses.put(
+                pokemonName,
+                pokemonLosses.getOrDefault(pokemonName, 0) + 1
+        );
+    }
+
+    public int getPokemonWins(String pokemonName) {
+        return pokemonWins.getOrDefault(pokemonName, 0);
+    }
+
+    public int getPokemonLosses(String pokemonName) {
+        return pokemonLosses.getOrDefault(pokemonName, 0);
+    }
+
+    public double getPokemonWinRatio(String pokemonName) {
+        int wins = getPokemonWins(pokemonName);
+        int losses = getPokemonLosses(pokemonName);
+
+        int totalBattles = wins + losses;
+
+        if (totalBattles == 0) {
+            return 0;
+        }
+
+        return (wins * 100.0) / totalBattles;
     }
 }

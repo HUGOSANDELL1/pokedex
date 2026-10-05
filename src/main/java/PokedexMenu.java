@@ -407,7 +407,24 @@ public class PokedexMenu {
                     System.out.println("Losses: " + battleStats.getTotalLosses());
                     System.out.println("Most used Pokemon: " + battleStats.getMostUsedPokemon());
                     System.out.println("Most used attack: " + battleStats.getMostUsedAttack());
-                    break;
+
+                        System.out.println("Pokemon Results:");
+
+                        for (Pokemon pokemon : pokemons) {
+                            System.out.println(
+                                    pokemon.getName() +
+                                            " - Wins: " +
+                                            battleStats.getPokemonWins(pokemon.getName()) +
+                                            ", Losses: " +
+                                            battleStats.getPokemonLosses(pokemon.getName())+
+                                            ", Win ratio: " +
+                                            String.format(
+                                                    "%.1f%%",
+                                                    battleStats.getPokemonWinRatio(pokemon.getName())
+                                            )
+                            );
+                        }
+                        break;
 
                 // Stop the while loop and exit the program
                 case 14:

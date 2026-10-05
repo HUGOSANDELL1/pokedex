@@ -239,6 +239,10 @@ public class BattleEngine {
 
             battleStats.addWin();
 
+            battleStats.addPokemonWin(
+                    playerPokemon.getName()
+            );
+
             return true;
         }
 
@@ -325,6 +329,9 @@ public class BattleEngine {
                     playerPokemon.getName() + " was defeated!"
             );
             battleStats.addLoss();
+            battleStats.addPokemonLoss(
+                    playerPokemon.getName()
+            );
             return true;
         }
 
