@@ -1,7 +1,6 @@
 package service;
 
 import model.Type;
-
 import java.util.Scanner;
 
 public class InputHelper {
@@ -14,6 +13,11 @@ public class InputHelper {
     ) {
         while (true) {
             System.out.print(message);
+
+            if (!scanner.hasNextLine()) {
+                System.out.println("\nInput ended. Closing program.");
+                System.exit(0);
+            }
 
             String input = scanner.nextLine().trim();
 
@@ -42,6 +46,11 @@ public class InputHelper {
     ) {
         while (true) {
             System.out.print(message);
+
+            if (!scanner.hasNextLine()) {
+                System.out.println("\nInput ended. Closing program.");
+                System.exit(0);
+            }
 
             String input = scanner.nextLine().trim();
 

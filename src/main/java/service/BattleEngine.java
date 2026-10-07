@@ -5,7 +5,7 @@ import model.BattleStats;
 import model.Pokemon;
 import model.Type;
 import model.DamageAttack;
-
+import model.DoubleStrikeAttack;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
@@ -43,10 +43,6 @@ public class BattleEngine {
 
         Pokemon playerPokemon = pokemons.get(choice - 1);
 
-        battleStats.recordPokemonUse(
-                playerPokemon.getName()
-        );
-
         if (playerPokemon.getAttacks().isEmpty()) {
             System.out.println("This Pokemon has no attacks.");
             return;
@@ -56,6 +52,10 @@ public class BattleEngine {
             System.out.println("This Pokemon has no HP left.");
             return;
         }
+
+        battleStats.recordPokemonUse(
+                playerPokemon.getName()
+        );
 
         System.out.println(
                 "You chose " + playerPokemon.getName() + "!"
@@ -360,7 +360,7 @@ public class BattleEngine {
         );
 
         wildBushRat.addAttack(
-                new DamageAttack(
+                new DoubleStrikeAttack(
                         "Cheese",
                         32,
                         90,

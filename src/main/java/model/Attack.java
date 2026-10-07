@@ -12,6 +12,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(
                 value = DamageAttack.class,
                 name = "damage"
+        ),
+        @JsonSubTypes.Type(
+                value = DoubleStrikeAttack.class,
+                name = "doubleStrike"
         )
 })
 
