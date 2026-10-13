@@ -8,7 +8,7 @@ import repository.BattleStatsFileManager;
 import repository.PokemonFileManager;
 import service.*;
 import model.DamageAttack;
-
+import service.PokemonNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -327,7 +327,12 @@ public class PokedexMenu {
 
                     try {
                         Pokemon pokemon =
-                                PokemonService.findPokemonByName(pokemons, searchName);
+                                PokemonService.findPokemonByName(
+                                        pokemons,
+                                        searchName)
+                                        .orElseThrow(
+                                        () -> new PokemonNotFoundException("Pokemon not found.")
+                                );
                         System.out.println(
                                 pokemon.getName() +
                                         " - Type: " + pokemon.getType() +

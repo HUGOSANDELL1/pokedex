@@ -1,22 +1,20 @@
 package service;
 
 import model.Pokemon;
-
+import java.util.Optional;
 import java.util.ArrayList;
 
 public class PokemonService {
 
-    public static Pokemon findPokemonByName(
+    public static Optional<Pokemon> findPokemonByName(
             ArrayList<Pokemon> pokemons,
             String name
     ) {
-        for (Pokemon pokemon : pokemons) {
-            if (pokemon.getName().equalsIgnoreCase(name)) {
-                return pokemon;
-            }
-        }
-
-        throw new PokemonNotFoundException("Pokemon not found.");
+                return pokemons.stream()
+                        .filter(pokemon ->
+                                pokemon.getName().equalsIgnoreCase(name)
+                        )
+                        .findFirst();
     }
 
     public static void validatePokemon(Pokemon pokemon) {
